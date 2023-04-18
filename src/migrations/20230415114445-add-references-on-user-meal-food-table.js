@@ -1,0 +1,37 @@
+'use strict';
+module.exports = {
+    up: async (queryInterface, Sequelize) => {
+        await queryInterface.changeColumn('User_Meal_Foods', 'foodId', {
+            type: Sequelize.INTEGER,
+            references: {
+                model: 'Foods',
+                key: 'id',
+            },
+            onUpdate: 'CASCADE',
+            onDelete: 'CASCADE',
+        });
+        await queryInterface.changeColumn('User_Meal_Foods', 'userFoodId', {
+            type: Sequelize.INTEGER,
+            references: {
+                model: 'User_Foods',
+                key: 'id',
+            },
+            onUpdate: 'CASCADE',
+            onDelete: 'CASCADE',
+        });
+        await queryInterface.changeColumn('User_Meal_Foods', 'mealId', {
+            type: Sequelize.INTEGER,
+            references: {
+                model: 'User_Meals',
+                key: 'id',
+            },
+            onUpdate: 'CASCADE',
+            onDelete: 'CASCADE',
+        });
+    },
+    down: async (queryInterface, Sequelize) => {
+        await queryInterface.removeColumn('User_Meal_Foods', 'foodId');
+        await queryInterface.removeColumn('User_Meal_Foods', 'userFoodId');
+        await queryInterface.removeColumn('User_Meal_Foods', 'mealId');
+    },
+};

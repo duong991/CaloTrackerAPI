@@ -1,0 +1,29 @@
+{
+  "compilerOptions": {
+    "resolveJsonModule": true,
+    "outDir": "dist",
+    "sourceMap": true,
+    "target": "es6",
+    "module": "commonjs",
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+    "noImplicitAny": true,
+    "strict": true,
+    "skipLibCheck": true,
+    "baseUrl": ".",
+    "paths": {
+      "~/*": [
+        "src/*"
+      ]
+    }
+  },
+  "include": [
+    "./*.js",
+    "src/**/*.ts",
+    "src/*.ts",
+    "test/**/*.ts",
+    "src/config/connectDB.ts",
+    "src/models/index.ts",
+    "src/utils/fakeDB/createAdmin.ts",
+  ],
+}
