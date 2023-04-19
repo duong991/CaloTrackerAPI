@@ -1,97 +1,100 @@
 import { Request, Response } from 'express';
-import AccManagerService from './food.service';
-
-export class AccManagerController {
-    public async createAccount(req: Request, res: Response): Promise<Response> {
-        const { email, password } = req.body;
-
-        if (!email || !password) {
-            return res
-                .status(400)
-                .json({ message: 'Email and password are required' });
+import UserFoodService from './food.service';
+import { userFoodRequest } from '../../interfaces/UserRequest';
+export class UserFoodController {
+    public async getAllFoods(req: Request, res: Response): Promise<Response> {
+        const userId = req.user.id;
+        try {
+            const foods = await UserFoodService.getAllFoods(userId);
+            return res.status(201).json(foods);
+        } catch (err) {
+            console.error(err);
+            return res.status(500).json({ message: 'Server error' });
         }
+    }
+
+    public async getFoodById(req: Request, res: Response): Promise<Response> {
+        const foodId = +req.params.id;
+        try {
+            const food = await UserFoodService.getFoodById(foodId);
+            return res.status(200).json(food);
+        } catch (err) {
+            console.error(err);
+            return res.status(500).json({ message: 'Server error' });
+        }
+    }
+
+    public async createFood(req: Request, res: Response): Promise<Response> {
+        const {
+            userId,
+            name,
+            calories,
+            protein,
+            carbohydrates,
+            fat,
+            food_type,
+        }: userFoodRequest = req.body;
 
         try {
-            const newUser = await AccManagerService.createAccount(
-                email,
-                password,
+            const food = await UserFoodService.createFood(
+                userId,
+                name,
+                calories,
+                protein,
+                carbohydrates,
+                fat,
+                food_type,
             );
-            return res.status(201).json(newUser);
+            return res.status(201).json(food);
         } catch (err) {
             console.error(err);
             return res.status(500).json({ message: 'Server error' });
         }
     }
 
-    public async getAccountById(
-        req: Request,
-        res: Response,
-    ): Promise<Response> {
+    public async updateFood(req: Request, res: Response): Promise<Response> {
         const id = Number(req.params.id);
-
+        const {
+            name,
+            calories,
+            protein,
+            carbohydrates,
+            fat,
+            food_type,
+        }: userFoodRequest = req.body;
         try {
-            const user = await AccManagerService.getAccountById(id);
-
-            if (!user) {
-                return res.status(404).json({ message: 'User not found' });
-            }
-
-            return res.status(200).json(user);
-        } catch (err) {
-            console.error(err);
-            return res.status(500).json({ message: 'Server error' });
-        }
-    }
-
-    public async getAllAccounts(
-        req: Request,
-        res: Response,
-    ): Promise<Response<any, Record<string, any>>> {
-        try {
-            const accounts = await AccManagerService.getAllAccounts();
-            return res.status(200).json(accounts);
-        } catch (err) {
-            console.error(err);
-            return res.status(500).json({ message: 'Server error' });
-        }
-    }
-
-    public async updateAccount(req: Request, res: Response): Promise<Response> {
-        const id = Number(req.params.id);
-        const { email } = req.body;
-
-        if (!email) {
-            return res.status(400).json({ message: 'Email is required' });
-        }
-
-        try {
-            const [numberOfAffectedRows, [updatedUser]] =
-                await AccManagerService.updateAccount(id, email);
-
-            if (numberOfAffectedRows === 0) {
-                return res.status(404).json({ message: 'User not found' });
-            }
-
-            return res.status(200).json(updatedUser);
-        } catch (err) {
-            console.error(err);
-            return res.status(500).json({ message: 'Server error' });
-        }
-    }
-
-    public async deleteAccount(req: Request, res: Response): Promise<Response> {
-        const id = Number(req.params.id);
-
-        try {
-            const numberOfDeletedRows = await AccManagerService.deleteAccount(
+            const updatedFood = await UserFoodService.updateFood(
                 id,
+                name,
+                calories,
+                protein,
+                carbohydrates,
+                fat,
+                food_type,
             );
+
+            return res.status(200).json(updatedFood);
+        } catch (err) {
+            console.error(err);
+            return res.status(500).json({ message: 'Server error' });
+        }
+    }
+
+    public async deleteFoods(req: Request, res: Response): Promise<Response> {
+        const { ids } = req.body;
+
+        try {
+            const numberOfDeletedRows = await UserFoodService.deleteFoods(ids);
 
             if (numberOfDeletedRows === 0) {
-                return res.status(404).json({ message: 'User not found' });
+                return res
+                    .status(404)
+                    .json({ message: 'No foods were deleted' });
             }
 
-            return res.status(204).send();
+            return res
+                .status(200)
+                .json({ message: `${numberOfDeletedRows} row(s) deleted` });
         } catch (err) {
             console.error(err);
             return res.status(500).json({ message: 'Server error' });

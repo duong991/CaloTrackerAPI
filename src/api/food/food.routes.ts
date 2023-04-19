@@ -1,12 +1,25 @@
 import express from 'express';
-import { AccManagerController } from './food.controller';
+import { UserFoodController } from './food.controller';
+import {
+    checkFoodOwnership,
+    checkArrFoodOwnership,
+} from '../../middleware/checkOwnership';
+import {
+    createFoodValidator,
+    updateFoodValidator,
+} from '../../middleware/requestValidator';
 const router = express.Router();
-const controller = new AccManagerController();
+const controller = new UserFoodController();
 
-router.get('/', controller.getAllAccounts);
-router.get('/:id', controller.getAccountById);
-router.post('/', controller.createAccount);
-router.put('/:id', controller.updateAccount);
-router.delete('/:id', controller.deleteAccount);
+router.get('/', controller.getAllFoods);
+router.get('/:id', checkFoodOwnership, controller.getFoodById);
+router.post('/', createFoodValidator, controller.createFood);
+router.put(
+    '/:id',
+    checkFoodOwnership,
+    updateFoodValidator,
+    controller.updateFood,
+);
+router.delete('/:', checkArrFoodOwnership, controller.deleteFoods);
 
-export { router as AccManagerRouter };
+export { router as FoodRouter };

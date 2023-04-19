@@ -29,9 +29,19 @@ interface MenuAttributes {
     mealType: 'breakfast' | 'lunch' | 'dinner' | 'snacks';
 }
 
+interface FoodAttributes {
+    id: number;
+    userId: number;
+    name: string;
+    calories: number;
+    protein: number;
+    carbohydrates: number;
+    fat: number;
+}
 export {
     MealFoodAttributes,
     MealMenuAttributes,
     DailyMenuAttributes,
     MenuAttributes,
+    FoodAttributes,
 };
