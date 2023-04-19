@@ -6,13 +6,16 @@ import {
     createRefreshToken,
 } from '../../utils/auth/generateToken';
 interface AuthService {
-    register: (email: string, password: string) => Promise<User>;
+    register: (username: string, password: string) => Promise<User>;
     login: (username: string, password: string) => Promise<object>;
 }
 
 const AuthService: AuthService = {
-    register: async (email: string, password: string): Promise<User> => {
-        const newUser = await User.create({ email, password: password });
+    register: async (username: string, password: string): Promise<User> => {
+        const newUser = await User.create({
+            username: username,
+            password: password,
+        });
         return newUser;
     },
     login: async (username: string, password: string): Promise<object> => {
