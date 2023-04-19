@@ -1,4 +1,3 @@
-import User from '../../models/User';
 import UserInfo from '../../models/UserInfo';
 import UpdateInfoUserRequest from '../../interfaces/UpdateInfoUserRequest';
 
