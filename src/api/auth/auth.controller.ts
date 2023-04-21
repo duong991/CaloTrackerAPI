@@ -13,6 +13,11 @@ export default class AuthController {
 
         try {
             const newUser = await AuthService.register(email, password);
+            if (!newUser) {
+                return res
+                    .status(400)
+                    .json({ message: 'Email already exists' });
+            }
             return res.status(201).json(newUser);
         } catch (err) {
             console.error(err);

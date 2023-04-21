@@ -6,15 +6,25 @@ import {
     createRefreshToken,
 } from '../../utils/auth/generateToken';
 interface AuthService {
-    register: (username: string, password: string) => Promise<User>;
+    register: (username: string, password: string) => Promise<User | boolean>;
     login: (username: string, password: string) => Promise<object>;
 }
 
 const AuthService: AuthService = {
-    register: async (username: string, password: string): Promise<User> => {
+    register: async (
+        username: string,
+        password: string,
+    ): Promise<User | boolean> => {
+        const user: User | null = await User.findOne({
+            where: { username: username },
+        });
+        if (user) {
+            return false;
+        }
         const newUser = await User.create({
             username: username,
             password: password,
+            role: false,
         });
         return newUser;
     },
