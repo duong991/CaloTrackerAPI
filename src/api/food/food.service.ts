@@ -1,26 +1,14 @@
 import UserFood from '../../models/UserFood';
 import { Op } from 'sequelize';
+import {
+    ICreateUserFood,
+    IUpdateUserFood,
+} from '../../interfaces/requests/user/user-food.interface';
 interface IUserFoodService {
     getAllFoods: (userId: number) => Promise<UserFood[] | null>;
     getFoodById: (id: number) => Promise<UserFood | null>;
-    createFood: (
-        userId: number,
-        name: string,
-        calories: number,
-        protein: number,
-        carbohydrates: number,
-        fat: number,
-        food_type: string,
-    ) => Promise<UserFood>;
-    updateFood: (
-        id: number,
-        name: string,
-        calories: number,
-        protein: number,
-        carbohydrates: number,
-        fat: number,
-        food_type: string,
-    ) => Promise<UserFood | null>;
+    createFood: (req: ICreateUserFood) => Promise<UserFood>;
+    updateFood: (id: number, req: IUpdateUserFood) => Promise<UserFood | null>;
     deleteFoods: (ids: number[]) => Promise<number>;
     checkUserFoods: (ids: number[], userId: number) => Promise<boolean>;
 }
@@ -37,15 +25,8 @@ const UserFoodService: IUserFoodService = {
         return food;
     },
 
-    createFood: async (
-        userId: number,
-        name: string,
-        calories: number,
-        protein: number,
-        carbohydrates: number,
-        fat: number,
-        food_type: string,
-    ) => {
+    createFood: async (req: ICreateUserFood) => {
+        const { userId, name, calories, protein, carbohydrates, fat } = req;
         return await UserFood.create({
             userId: userId,
             name: name,
@@ -53,19 +34,11 @@ const UserFoodService: IUserFoodService = {
             protein: protein,
             carbohydrates: carbohydrates,
             fat: fat,
-            food_type: food_type,
         });
     },
 
-    updateFood: async (
-        id: number,
-        name: string,
-        calories: number,
-        protein: number,
-        carbohydrates: number,
-        fat: number,
-        food_type: string,
-    ) => {
+    updateFood: async (id: number, req: IUpdateUserFood) => {
+        const { name, calories, protein, carbohydrates, fat } = req;
         const foodToUpdate = await UserFood.findByPk(id);
 
         if (!foodToUpdate) {
@@ -78,7 +51,6 @@ const UserFoodService: IUserFoodService = {
             protein: protein,
             carbohydrates: carbohydrates,
             fat: fat,
-            food_type: food_type,
         });
 
         return foodToUpdate;

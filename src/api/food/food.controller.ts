@@ -1,6 +1,5 @@
 import { Request, Response } from 'express';
 import UserFoodService from './food.service';
-import IUserFood from '../../interfaces/requests/user-food.interface';
 export class UserFoodController {
     public async getAllFoods(req: Request, res: Response): Promise<Response> {
         const userId = req.user.id;
@@ -25,26 +24,8 @@ export class UserFoodController {
     }
 
     public async createFood(req: Request, res: Response): Promise<Response> {
-        const {
-            userId,
-            name,
-            calories,
-            protein,
-            carbohydrates,
-            fat,
-            food_type,
-        }: IUserFood = req.body;
-
         try {
-            const food = await UserFoodService.createFood(
-                userId,
-                name,
-                calories,
-                protein,
-                carbohydrates,
-                fat,
-                food_type,
-            );
+            const food = await UserFoodService.createFood(req.body);
             return res.status(201).json(food);
         } catch (err) {
             console.error(err);
@@ -53,24 +34,11 @@ export class UserFoodController {
     }
 
     public async updateFood(req: Request, res: Response): Promise<Response> {
-        const id = Number(req.params.id);
-        const {
-            name,
-            calories,
-            protein,
-            carbohydrates,
-            fat,
-            food_type,
-        }: IUserFood = req.body;
+        const foodId = Number(req.params.id);
         try {
             const updatedFood = await UserFoodService.updateFood(
-                id,
-                name,
-                calories,
-                protein,
-                carbohydrates,
-                fat,
-                food_type,
+                foodId,
+                req.body,
             );
 
             return res.status(200).json(updatedFood);
