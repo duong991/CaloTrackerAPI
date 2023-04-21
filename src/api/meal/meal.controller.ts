@@ -1,97 +1,70 @@
 import { Request, Response } from 'express';
-import AccManagerService from './meal.service';
+import UserMealService from './meal.service';
 
-export class AccManagerController {
-    public async createAccount(req: Request, res: Response): Promise<Response> {
-        const { email, password } = req.body;
-
-        if (!email || !password) {
-            return res
-                .status(400)
-                .json({ message: 'Email and password are required' });
-        }
-
+export class UserMealController {
+    public async getMeals(req: Request, res: Response): Promise<Response> {
+        const userId = req.user.id;
         try {
-            const newUser = await AccManagerService.createAccount(
-                email,
-                password,
+            const meals = await UserMealService.getAllMealsByUserId(userId);
+            return res.status(200).json(meals);
+        } catch (err) {
+            console.error(err);
+            return res.status(500).json({ message: 'Server error' });
+        }
+    }
+
+    public async getMealById(req: Request, res: Response): Promise<Response> {
+        const id = Number(req.params.id);
+        try {
+            const meal = await UserMealService.getMealById(id);
+
+            if (!meal) {
+                return res.status(404).json({ message: 'Meal not found' });
+            }
+
+            return res.status(200).json(meal);
+        } catch (err) {
+            console.error(err);
+            return res.status(500).json({ message: 'Server error' });
+        }
+    }
+    public async createMeal(req: Request, res: Response): Promise<Response> {
+        try {
+            const newMeal = await UserMealService.createMeal(req.body);
+            return res.status(201).json(newMeal);
+        } catch (err) {
+            console.error(err);
+            return res.status(500).json({ message: 'Server error' });
+        }
+    }
+
+    public async updateMeal(req: Request, res: Response): Promise<Response> {
+        const mealId = +req.params.id;
+        try {
+            const updateStatus = await UserMealService.updateMeal(
+                mealId,
+                req.body,
             );
-            return res.status(201).json(newUser);
-        } catch (err) {
-            console.error(err);
-            return res.status(500).json({ message: 'Server error' });
-        }
-    }
-
-    public async getAccountById(
-        req: Request,
-        res: Response,
-    ): Promise<Response> {
-        const id = Number(req.params.id);
-
-        try {
-            const user = await AccManagerService.getAccountById(id);
-
-            if (!user) {
-                return res.status(404).json({ message: 'User not found' });
+            if (updateStatus) {
+                return res.status(200).json({ message: 'Update done' });
+            } else {
+                return res.status(400).json({ message: 'Invalid request' });
             }
-
-            return res.status(200).json(user);
         } catch (err) {
             console.error(err);
             return res.status(500).json({ message: 'Server error' });
         }
     }
 
-    public async getAllAccounts(
-        req: Request,
-        res: Response,
-    ): Promise<Response<any, Record<string, any>>> {
+    public async deleteMeal(req: Request, res: Response): Promise<Response> {
+        const mealId = Number(req.params.id);
         try {
-            const accounts = await AccManagerService.getAllAccounts();
-            return res.status(200).json(accounts);
-        } catch (err) {
-            console.error(err);
-            return res.status(500).json({ message: 'Server error' });
-        }
-    }
-
-    public async updateAccount(req: Request, res: Response): Promise<Response> {
-        const id = Number(req.params.id);
-        const { email } = req.body;
-
-        if (!email) {
-            return res.status(400).json({ message: 'Email is required' });
-        }
-
-        try {
-            const [numberOfAffectedRows, [updatedUser]] =
-                await AccManagerService.updateAccount(id, email);
-
-            if (numberOfAffectedRows === 0) {
-                return res.status(404).json({ message: 'User not found' });
+            const deleteStatus = await UserMealService.deleteMeal(mealId);
+            if (deleteStatus) {
+                return res.status(200).json({ message: 'Delete done' });
+            } else {
+                return res.status(400).json({ message: 'Invalid request' });
             }
-
-            return res.status(200).json(updatedUser);
-        } catch (err) {
-            console.error(err);
-            return res.status(500).json({ message: 'Server error' });
-        }
-    }
-
-    public async deleteAccount(req: Request, res: Response): Promise<Response> {
-        const id = Number(req.params.id);
-
-        try {
-            const numberOfDeletedRows = await AccManagerService.deleteAccount(
-                id,
-            );
-
-            if (numberOfDeletedRows === 0) {
-                return res.status(404).json({ message: 'User not found' });
-            }
-
-            return res.status(204).send();
         } catch (err) {
             console.error(err);
             return res.status(500).json({ message: 'Server error' });

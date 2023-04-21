@@ -2,7 +2,7 @@ import jwt from 'jsonwebtoken';
 import {
     UserPayload,
     RefreshTokenPayload,
-} from '../../interfaces/TokenResponse';
+} from '../../interfaces/auth/TokenResponse';
 import dotenv from 'dotenv';
 dotenv.config();
 
