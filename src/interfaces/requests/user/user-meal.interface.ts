@@ -2,23 +2,25 @@ import { IUserMealFood, IUpdateUserMealFood } from './user-meal-food.interface';
 interface ICreateUserMealRequest {
     userId: number;
     name: string;
-    description: string | null;
-    image: string | null;
+    description?: string;
+    image?: Buffer;
     calories: number;
     protein: number;
     carbohydrates: number;
     fat: number;
+    mealType: 'breakfast' | 'lunch' | 'dinner' | 'snacks';
     userMealFood: IUserMealFood[];
 }
 
 interface IUpdateUserMealRequest {
     name: string;
-    description: string | null;
-    image: string | null;
+    description?: string;
+    image?: Buffer;
     calories: number;
     protein: number;
     carbohydrates: number;
     fat: number;
+    mealType: 'breakfast' | 'lunch' | 'dinner' | 'snacks';
     userMealFood: IUpdateUserMealFood[];
 }
 

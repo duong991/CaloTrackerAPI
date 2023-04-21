@@ -1,7 +1,8 @@
 import { Model, DataTypes } from 'sequelize';
 import { sequelize } from '../config/connectDB';
 import User from './User';
-class UserInfo extends Model {
+import { UserInfoAttributes } from '../interfaces/models/model.interface';
+class UserInfo extends Model<UserInfoAttributes> implements UserInfoAttributes {
     public id!: number;
     public userId!: number;
     public weight!: number;

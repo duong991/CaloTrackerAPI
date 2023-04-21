@@ -1,8 +1,8 @@
 import { Model, DataTypes } from 'sequelize';
 import { sequelize } from '../config/connectDB';
 import User from './User';
-
-class WaterLog extends Model {
+import { WaterLogAttributes } from '../interfaces/models/model.interface';
+class WaterLog extends Model<WaterLogAttributes> implements WaterLogAttributes {
     public id!: number;
     public userId!: number;
     public date!: Date;
@@ -38,7 +38,7 @@ WaterLog.init(
             allowNull: false,
         },
         amount: {
-            type: DataTypes.INTEGER,
+            type: DataTypes.FLOAT,
             allowNull: false,
         },
     },

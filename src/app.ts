@@ -23,7 +23,7 @@ import UserMealFood from './models/UserMealFood';
 import UserMealMenu from './models/UserMealMenu';
 import WaterLog from './models/WaterLog';
 import UserWeightHistory from './models/UserWeightHistory';
-
+import UserMenu from './models/UserMenu';
 dotenv.config();
 
 const app = express();
@@ -33,16 +33,17 @@ User.associate();
 DailyMenu.associate();
 Exercise.associate();
 Food.associate();
-Meal.associate();
-Menu.associate();
-Token.associate();
-UserExercise.associate();
 UserFood.associate();
+Meal.associate();
 UserMeal.associate();
+Menu.associate();
+UserMenu.associate();
+UserExercise.associate();
 UserMealFood.associate();
 UserMealMenu.associate();
-WaterLog.associate();
 UserWeightHistory.associate();
+Token.associate();
+WaterLog.associate();
 
 cronJobDeleteExpiredTokens.start();
 

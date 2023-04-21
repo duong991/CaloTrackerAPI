@@ -3,18 +3,18 @@ import { sequelize } from '../config/connectDB';
 import MealFood from './MealFood';
 import MealMenu from './MealMenu';
 import UserMealMenu from './UserMealMenu';
-import { MealAttributes } from '../interfaces/models/modal.interface';
+import { MealAttributes } from '../interfaces/models/model.interface';
 
 class Meal extends Model<MealAttributes> implements MealAttributes {
     public id!: number;
     public name!: string;
-    public description!: string;
+    public description?: string;
     public image?: Buffer; // khai báo image là kiểu Buffer
     public calories!: number;
     public protein!: number;
     public carbohydrates!: number;
     public fat!: number;
-
+    public mealType!: 'breakfast' | 'lunch' | 'dinner' | 'snacks';
     public static associate = () => {
         Meal.hasMany(MealFood, { foreignKey: 'mealId', as: 'MealFood' });
         Meal.hasMany(MealMenu, { foreignKey: 'mealId', as: 'MealMenu' });
@@ -58,6 +58,10 @@ Meal.init(
         },
         fat: {
             type: DataTypes.FLOAT,
+            allowNull: false,
+        },
+        mealType: {
+            type: DataTypes.ENUM('breakfast', 'lunch', 'dinner', 'snacks'),
             allowNull: false,
         },
     },

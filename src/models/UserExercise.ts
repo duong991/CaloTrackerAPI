@@ -2,8 +2,11 @@ import { Model, DataTypes } from 'sequelize';
 import { sequelize } from '../config/connectDB';
 import User from './User';
 import Exercise from './Exercise';
-
-class UserExercise extends Model {
+import { UserExrAttributes } from '../interfaces/models/model.interface';
+class UserExercise
+    extends Model<UserExrAttributes>
+    // eslint-disable-next-line prettier/prettier
+    implements UserExrAttributes {
     public id!: number;
     public userId!: number;
     public exerciseId!: number;

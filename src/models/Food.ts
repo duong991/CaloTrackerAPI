@@ -2,7 +2,7 @@ import { Model, DataTypes } from 'sequelize';
 import { sequelize } from '../config/connectDB';
 import MealFood from './MealFood';
 import UserMealFood from './UserMealFood';
-import { FoodAttributes } from '../interfaces/models/modal.interface';
+import { FoodAttributes } from '../interfaces/models/model.interface';
 
 class Food extends Model<FoodAttributes> implements FoodAttributes {
     public id!: number;
@@ -11,7 +11,6 @@ class Food extends Model<FoodAttributes> implements FoodAttributes {
     public protein!: number;
     public carbohydrates!: number;
     public fat!: number;
-    public foodType!: string;
 
     public readonly createdAt!: Date;
     public readonly updatedAt!: Date;
@@ -50,10 +49,6 @@ Food.init(
         },
         fat: {
             type: DataTypes.FLOAT,
-            allowNull: false,
-        },
-        foodType: {
-            type: DataTypes.STRING(255),
             allowNull: false,
         },
     },

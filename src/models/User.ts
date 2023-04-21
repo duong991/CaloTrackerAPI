@@ -1,5 +1,6 @@
 import { Model, DataTypes } from 'sequelize';
 import { sequelize } from '../config/connectDB';
+import { UserAttributes } from '../interfaces/models/model.interface';
 import UserInfo from './UserInfo';
 import UserWeightHistory from './UserWeightHistory';
 import UserExercise from './UserExercise';
@@ -9,7 +10,7 @@ import UserMeal from './UserMeal';
 import DailyMenu from './DailyMenu';
 import UserMenu from './UserMenu';
 import Token from './Token';
-class User extends Model {
+class User extends Model<UserAttributes> implements UserAttributes {
     public id!: number;
     public username!: string;
     public password!: string;

@@ -1,7 +1,7 @@
 import { Model, DataTypes } from 'sequelize';
 import { sequelize } from '../config/connectDB';
 import User from './User';
-import { DailyMenuAttributes } from '../interfaces/models/modal.interface';
+import { DailyMenuAttributes } from '../interfaces/models/model.interface';
 import Menu from './Menu';
 import UserMenu from './UserMenu';
 

@@ -3,14 +3,13 @@ import { sequelize } from '../config/connectDB';
 
 import User from './User';
 import DailyMenu from './DailyMenu';
-import { MenuAttributes } from '~/interfaces/models/modal.interface';
+import { MenuAttributes } from '~/interfaces/models/model.interface';
 import UserMealMenu from './UserMealMenu';
-class UserMenu extends Model<MenuAttributes> implements MenuAttributes {
+class UserMenu extends Model {
     public id!: number;
     public userId!: number;
     public name!: string;
-    public description!: string;
-    public mealType!: 'breakfast' | 'lunch' | 'dinner' | 'snacks';
+    public description?: string;
 
     // các trường timestamp
     public readonly createdAt!: Date;
@@ -18,17 +17,13 @@ class UserMenu extends Model<MenuAttributes> implements MenuAttributes {
 
     public static associate = () => {
         UserMenu.hasMany(DailyMenu, {
-            foreignKey: {
-                name: 'menuId',
-                allowNull: false,
-            },
+            foreignKey: 'menuId',
+            as: 'DailyMenu',
             onDelete: 'CASCADE',
         });
         UserMenu.hasMany(UserMealMenu, {
-            foreignKey: {
-                name: 'menuId',
-                allowNull: false,
-            },
+            foreignKey: 'menuId',
+            as: 'UserMealMenu',
             onDelete: 'CASCADE',
         });
 
@@ -58,10 +53,6 @@ UserMenu.init(
         description: {
             type: DataTypes.TEXT,
             allowNull: true,
-        },
-        mealType: {
-            type: DataTypes.ENUM('breakfast', 'lunch', 'dinner', 'snacks'),
-            allowNull: false,
         },
     },
     {

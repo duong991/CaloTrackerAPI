@@ -3,8 +3,8 @@ import { sequelize } from '../config/connectDB';
 
 import Menu from './Menu';
 import Meal from './Meal';
-
-class MealMenu extends Model {
+import { MealMenuAttributes } from '../interfaces/models/model.interface';
+class MealMenu extends Model<MealMenuAttributes> implements MealMenuAttributes {
     public id!: number;
     public menuId!: number;
     public mealId!: number;

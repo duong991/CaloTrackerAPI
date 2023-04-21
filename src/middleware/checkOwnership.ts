@@ -1,6 +1,7 @@
 import { Request, Response, NextFunction } from 'express';
 import UserFoodService from '../api/food/food.service';
 import UserMealService from '../api/meal/meal.service';
+import UserMenuService from '../api/menu/menu.service';
 
 const checkFoodOwnership = async (
     req: Request,
@@ -82,4 +83,38 @@ const checkMealOwnership = async (
         return res.status(500).json({ message: 'Server error' });
     }
 };
-export { checkFoodOwnership, checkArrFoodOwnership, checkMealOwnership };
+
+const checkMenuOwnership = async (
+    req: Request,
+    res: Response,
+    next: NextFunction,
+) => {
+    const menuId = +req.params.id;
+    const userId = req.user.id; // assume that user information is extracted from JWT token
+
+    try {
+        const menu = await UserMenuService.getMenuById(menuId);
+
+        if (!menu) {
+            return res.status(404).json({ message: 'Menu not found' });
+        }
+
+        if (menu.userId !== userId) {
+            return res.status(403).json({
+                message: 'You are not authorized to perform this action',
+            });
+        }
+
+        next();
+    } catch (error) {
+        console.error(error);
+        return res.status(500).json({ message: 'Server error' });
+    }
+};
+
+export {
+    checkFoodOwnership,
+    checkArrFoodOwnership,
+    checkMealOwnership,
+    checkMenuOwnership,
+};

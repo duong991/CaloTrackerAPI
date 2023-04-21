@@ -1,15 +1,15 @@
+/* eslint-disable prettier/prettier */
 import { Model, DataTypes } from 'sequelize';
 import { sequelize } from '../config/connectDB';
 
 import Meal from './Meal';
 import UserMeal from './UserMeal';
-import { MealMenuAttributes } from '../interfaces/models/modal.interface';
+import { UserMealMenuAttributes } from '../interfaces/models/model.interface';
 import UserMenu from './UserMenu';
 
 class UserMealMenu
-    extends Model<MealMenuAttributes>
-    // eslint-disable-next-line prettier/prettier
-    implements MealMenuAttributes {
+    extends Model<UserMealMenuAttributes>
+    implements UserMealMenuAttributes {
     public id!: number;
     public menuId!: number;
     public mealId?: number;

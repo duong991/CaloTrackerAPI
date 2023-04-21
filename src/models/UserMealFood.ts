@@ -4,8 +4,11 @@ import { sequelize } from '../config/connectDB';
 import UserMeal from './UserMeal';
 import UserFood from './UserFood';
 import Food from './Food';
-
-class UserMealFood extends Model {
+import { UserMealFoodAttributes } from '../interfaces/models/model.interface';
+class UserMealFood
+    extends Model<UserMealFoodAttributes>
+    // eslint-disable-next-line prettier/prettier
+    implements UserMealFoodAttributes {
     public id!: number;
     public mealId!: number;
     public foodId?: number;

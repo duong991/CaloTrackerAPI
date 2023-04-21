@@ -3,12 +3,13 @@ import { sequelize } from '../config/connectDB';
 
 import Meal from './Meal';
 import Food from './Food';
+import { MealFoodAttributes } from '../interfaces/models/model.interface';
 
-class MealFood extends Model {
+class MealFood extends Model<MealFoodAttributes> implements MealFoodAttributes {
     public id!: number;
-    public meal_id!: number;
+    public mealId!: number;
     public foodId!: number;
-    public serving_size!: number;
+    public servingSize!: number;
 
     public readonly createdAt!: Date;
     public readonly updatedAt!: Date;

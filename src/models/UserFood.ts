@@ -3,8 +3,8 @@ import { sequelize } from '../config/connectDB';
 
 import User from './User';
 import UserMealFood from './UserMealFood';
-
-class UserFood extends Model {
+import { UserFoodAttributes } from '../interfaces/models/model.interface';
+class UserFood extends Model<UserFoodAttributes> implements UserFoodAttributes {
     public id!: number;
     public userId!: number;
     public name!: string;

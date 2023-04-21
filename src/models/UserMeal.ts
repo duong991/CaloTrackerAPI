@@ -3,8 +3,8 @@ import { sequelize } from '../config/connectDB';
 import UserMealFood from './UserMealFood';
 import User from './User';
 import UserMealMenu from './UserMealMenu';
-
-class UserMeal extends Model {
+import { UserMealAttributes } from '../interfaces/models/model.interface';
+class UserMeal extends Model<UserMealAttributes> implements UserMealAttributes {
     public id!: number;
     public userId!: number;
     public name!: string;
@@ -14,6 +14,7 @@ class UserMeal extends Model {
     public protein!: number;
     public carbohydrates!: number;
     public fat!: number;
+    public mealType!: 'breakfast' | 'lunch' | 'dinner' | 'snacks';
 
     public readonly createdAt!: Date;
     public readonly updatedAt!: Date;
@@ -72,6 +73,10 @@ UserMeal.init(
         },
         fat: {
             type: DataTypes.FLOAT,
+            allowNull: false,
+        },
+        mealType: {
+            type: DataTypes.ENUM('breakfast', 'lunch', 'dinner', 'snacks'),
             allowNull: false,
         },
     },

@@ -1,8 +1,9 @@
+/* eslint-disable prettier/prettier */
 import { Model, DataTypes } from 'sequelize';
 import { sequelize } from '../config/connectDB';
 import User from './User';
-
-class UserWeightHistory extends Model {
+import { UserWeightHistoryAttributes } from '../interfaces/models/model.interface';
+class UserWeightHistory extends Model<UserWeightHistoryAttributes> implements UserWeightHistoryAttributes {
     public id!: number;
     public userId!: number;
     public date!: number;
@@ -37,10 +38,11 @@ UserWeightHistory.init(
             type: DataTypes.DATE,
             allowNull: false,
         },
-        role: {
-            type: DataTypes.BOOLEAN,
+        weight: {
+            type: DataTypes.FLOAT,
             allowNull: false,
         },
+
     },
     {
         modelName: 'UserWeightHistory',
