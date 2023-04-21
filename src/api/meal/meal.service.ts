@@ -7,7 +7,7 @@ import UserMenu from '../../models/UserMenu';
 import {
     ICreateUserMealRequest,
     IUpdateUserMealRequest,
-} from '../../interfaces/requests/user-meal.interface';
+} from '../../interfaces/requests/user/user-meal.interface';
 import { Transaction } from 'sequelize';
 import { sequelize } from '../../config/connectDB';
 interface IUserMealService {
@@ -75,6 +75,7 @@ const UserMealService: IUserMealService = {
             protein,
             carbohydrates,
             fat,
+            mealType,
             userMealFood,
         } = req;
         const newMeal = await UserMeal.create({
@@ -86,6 +87,7 @@ const UserMealService: IUserMealService = {
             protein,
             carbohydrates,
             fat,
+            mealType,
         });
         const newMealId = newMeal.id;
         userMealFood.map(async (item) => {
@@ -111,26 +113,35 @@ const UserMealService: IUserMealService = {
             protein,
             carbohydrates,
             fat,
+            mealType,
             userMealFood,
         } = req;
         try {
             // Tìm tất cả các id bản ghi trong bảng UserMealFood có chứa mealId
-            const foodMealIds = await UserMealFood.findAll({
+            const foodMeal = await UserMealFood.findAll({
                 attributes: ['id'],
                 where: {
                     mealId: mealId,
                 },
                 transaction: t,
             });
+            // chuyển sang mảng các id
+            const foodMealIds = [];
+            for (let i = 0; i < foodMeal.length; i++) {
+                foodMealIds.push(foodMeal[i].id);
+            }
 
             // lấy ra các bản ghi không có id trong bảng UserMealFood
             const newFoodMeals = userMealFood.filter((item) => {
                 return !item.id;
             });
             // lấy ra các id của bản ghi cần xóa trong bảng UserMealFood
+            // (các bản ghi có id nhưng không có trong mảng userMealFood được gửi lên)
+            // ta thực hiện lấy ra các id của các bản ghi không có trong mảng userMealFood
+            // và có trong mảng foodMealIds
             const deleteFoodMealIds = foodMealIds.filter((item) => {
                 return !userMealFood.find((foodMeal) => {
-                    return foodMeal.id === item.id;
+                    return foodMeal.id === item;
                 });
             });
             // thưc hiện xóa các bản ghi trong bảng UserMealFood
@@ -186,6 +197,7 @@ const UserMealService: IUserMealService = {
                     protein,
                     carbohydrates,
                     fat,
+                    mealType,
                 },
                 {
                     where: {
