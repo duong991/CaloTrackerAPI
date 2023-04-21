@@ -2,7 +2,7 @@ import { DataTypes, Model } from 'sequelize';
 import { sequelize } from '../config/connectDB';
 import MealMenu from './MealMenu';
 import DailyMenu from './DailyMenu';
-import { MenuAttributes } from '../interfaces/ModalInterface';
+import { MenuAttributes } from '../interfaces/models/modal.interface';
 class Menu extends Model<MenuAttributes> implements MenuAttributes {
     public id!: number;
     public userId!: number;

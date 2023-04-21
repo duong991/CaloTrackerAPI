@@ -3,7 +3,7 @@ import { sequelize } from '../config/connectDB';
 
 import Meal from './Meal';
 import UserMeal from './UserMeal';
-import { MealMenuAttributes } from '../interfaces/ModalInterface';
+import { MealMenuAttributes } from '../interfaces/models/modal.interface';
 import UserMenu from './UserMenu';
 
 class UserMealMenu
@@ -12,21 +12,22 @@ class UserMealMenu
     implements MealMenuAttributes {
     public id!: number;
     public menuId!: number;
-    public mealId!: number;
-    public userMealId!: number;
+    public mealId?: number;
+    public userMealId?: number;
     public readonly createdAt!: Date;
     public readonly updatedAt!: Date;
 
     public static associate = () => {
-        UserMealMenu.belongsTo(UserMeal, { foreignKey: 'menuId', as: 'Menu' });
+        UserMealMenu.belongsTo(UserMenu, {
+            foreignKey: 'menuId',
+            as: 'UserMenu',
+        });
         UserMealMenu.belongsTo(Meal, {
             foreignKey: 'mealId',
-            targetKey: 'id',
             as: 'Meal',
         });
         UserMealMenu.belongsTo(UserMeal, {
-            foreignKey: 'mealId',
-            targetKey: 'id',
+            foreignKey: 'userMealId',
             as: 'UserMeal',
         });
     };
@@ -49,7 +50,7 @@ UserMealMenu.init(
         },
         mealId: {
             type: DataTypes.INTEGER,
-            allowNull: false,
+            allowNull: true,
             references: {
                 model: Meal,
                 key: 'id',
@@ -57,7 +58,7 @@ UserMealMenu.init(
         },
         userMealId: {
             type: DataTypes.INTEGER,
-            allowNull: false,
+            allowNull: true,
             references: {
                 model: UserMeal,
                 key: 'id',

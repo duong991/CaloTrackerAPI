@@ -3,7 +3,9 @@ import { sequelize } from '../config/connectDB';
 import MealFood from './MealFood';
 import MealMenu from './MealMenu';
 import UserMealMenu from './UserMealMenu';
-class Meal extends Model {
+import { MealAttributes } from '../interfaces/models/modal.interface';
+
+class Meal extends Model<MealAttributes> implements MealAttributes {
     public id!: number;
     public name!: string;
     public description!: string;

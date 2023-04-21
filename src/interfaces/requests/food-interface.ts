@@ -1,9 +1,12 @@
-export interface userFoodRequest {
-    userId: number;
+interface IFood {
+    id: number;
     name: string;
+    description?: string;
+    image?: string;
     calories: number;
     protein: number;
     carbohydrates: number;
     fat: number;
-    food_type: string;
 }
+
+export default IFood;

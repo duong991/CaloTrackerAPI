@@ -8,8 +8,8 @@ import Food from './Food';
 class UserMealFood extends Model {
     public id!: number;
     public mealId!: number;
-    public foodId!: string;
-    public userFoodId!: number;
+    public foodId?: number;
+    public userFoodId?: number;
     public servingSize!: number;
 
     public readonly createdAt!: Date;
@@ -20,10 +20,9 @@ class UserMealFood extends Model {
             foreignKey: 'mealId',
             as: 'UserMeal',
         });
-        UserMealFood.belongsTo(Food, { foreignKey: 'foodId', as: 'Food' });
+        UserMealFood.belongsTo(Food, { foreignKey: 'foodId' });
         UserMealFood.belongsTo(UserFood, {
             foreignKey: 'userFoodId',
-            as: 'UserFood',
         });
     };
 }
@@ -45,7 +44,7 @@ UserMealFood.init(
         },
         foodId: {
             type: DataTypes.INTEGER,
-            allowNull: false,
+            allowNull: true,
             references: {
                 model: Food,
                 key: 'id',
@@ -53,7 +52,7 @@ UserMealFood.init(
         },
         userFoodId: {
             type: DataTypes.INTEGER,
-            allowNull: false,
+            allowNull: true,
             references: {
                 model: UserFood,
                 key: 'id',

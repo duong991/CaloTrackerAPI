@@ -8,8 +8,8 @@ class UserMeal extends Model {
     public id!: number;
     public userId!: number;
     public name!: string;
-    public description!: string;
-    public image!: Buffer;
+    public description?: string;
+    public image?: Buffer;
     public calories!: number;
     public protein!: number;
     public carbohydrates!: number;
@@ -18,7 +18,7 @@ class UserMeal extends Model {
     public readonly createdAt!: Date;
     public readonly updatedAt!: Date;
 
-    public static associate = () => {
+    public static associate = (): void => {
         UserMeal.belongsTo(User, { foreignKey: 'userId', as: 'User' });
         UserMeal.hasMany(UserMealFood, {
             foreignKey: 'mealId',

@@ -3,7 +3,7 @@ import { sequelize } from '../config/connectDB';
 
 import User from './User';
 import DailyMenu from './DailyMenu';
-import { MenuAttributes } from '~/interfaces/ModalInterface';
+import { MenuAttributes } from '~/interfaces/models/modal.interface';
 import UserMealMenu from './UserMealMenu';
 class UserMenu extends Model<MenuAttributes> implements MenuAttributes {
     public id!: number;

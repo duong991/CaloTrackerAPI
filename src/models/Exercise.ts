@@ -1,8 +1,8 @@
 import { Model, DataTypes } from 'sequelize';
 import { sequelize } from '../config/connectDB';
 import UserExercise from './UserExercise';
-
-class Exercise extends Model {
+import { ExerciseAttributes } from '../interfaces/models/modal.interface';
+class Exercise extends Model<ExerciseAttributes> implements ExerciseAttributes {
     public id!: number;
     public name!: string;
     public caloriesBurned!: number;

@@ -13,7 +13,7 @@ class UserInfo extends Model {
     public readonly updatedAt!: Date;
 
     public static associate = () => {
-        UserInfo.belongsTo(User, { foreignKey: 'userId', as: 'user' });
+        UserInfo.belongsTo(User, { foreignKey: 'userId' });
     };
 }
 

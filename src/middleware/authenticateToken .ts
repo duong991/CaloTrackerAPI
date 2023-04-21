@@ -6,7 +6,10 @@ import {
     createAccessToken,
     createRefreshToken,
 } from '../utils/auth/generateToken';
-import { UserPayload, RefreshTokenPayload } from '../interfaces/TokenResponse';
+import {
+    UserPayload,
+    RefreshTokenPayload,
+} from '../interfaces/auth/TokenResponse';
 
 const authenticateToken = async (
     req: Request,

@@ -2,15 +2,16 @@ import { Model, DataTypes } from 'sequelize';
 import { sequelize } from '../config/connectDB';
 import MealFood from './MealFood';
 import UserMealFood from './UserMealFood';
+import { FoodAttributes } from '../interfaces/models/modal.interface';
 
-class Food extends Model {
+class Food extends Model<FoodAttributes> implements FoodAttributes {
     public id!: number;
     public name!: string;
     public calories!: number;
     public protein!: number;
     public carbohydrates!: number;
     public fat!: number;
-    public food_type!: string;
+    public foodType!: string;
 
     public readonly createdAt!: Date;
     public readonly updatedAt!: Date;
