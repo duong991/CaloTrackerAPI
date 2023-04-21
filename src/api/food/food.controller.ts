@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 import UserFoodService from './food.service';
-import { userFoodRequest } from '../../interfaces/UserRequest';
+import IUserFood from '../../interfaces/requests/user-food.interface';
 export class UserFoodController {
     public async getAllFoods(req: Request, res: Response): Promise<Response> {
         const userId = req.user.id;
@@ -33,7 +33,7 @@ export class UserFoodController {
             carbohydrates,
             fat,
             food_type,
-        }: userFoodRequest = req.body;
+        }: IUserFood = req.body;
 
         try {
             const food = await UserFoodService.createFood(
@@ -61,7 +61,7 @@ export class UserFoodController {
             carbohydrates,
             fat,
             food_type,
-        }: userFoodRequest = req.body;
+        }: IUserFood = req.body;
         try {
             const updatedFood = await UserFoodService.updateFood(
                 id,
