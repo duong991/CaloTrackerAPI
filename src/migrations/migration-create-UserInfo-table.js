@@ -11,13 +11,10 @@ module.exports = {
             userId: {
                 type: Sequelize.INTEGER,
                 allowNull: false,
-                // unique: true,
-                // references: {
-                //     model: "User",
-                //     key: "id",
-                // },
-                // onUpdate: "CASCADE",
-                // onDelete: "CASCADE",
+            },
+            gender: {
+                type: Sequelize.BOOLEAN,
+                allowNull: false,
             },
             weight: {
                 type: Sequelize.FLOAT,
@@ -29,15 +26,39 @@ module.exports = {
             },
             activityLevel: {
                 type: Sequelize.ENUM(
-                    'sedentary',
-                    'moderatelyActive',
-                    'active',
-                    'veryActive',
+                    'Rất ít hoạt động',
+                    'Ít hoạt động',
+                    'Hoạt động vừa phải',
+                    'Hoạt động nhiều',
+                    'Hoạt động tích cực',
                 ),
                 allowNull: false,
             },
             BMR: {
                 type: Sequelize.INTEGER,
+                allowNull: false,
+            },
+            target: {
+                type: Sequelize.ENUM(
+                    'Giảm cân',
+                    'Tăng cân',
+                    'Giữ nguyên cân nặng',
+                ),
+            },
+            lastTimeToUpdate: {
+                type: Sequelize.STRING,
+                allowNull: false,
+            },
+            protein: {
+                type: Sequelize.FLOAT,
+                allowNull: false,
+            },
+            fat: {
+                type: Sequelize.FLOAT,
+                allowNull: false,
+            },
+            carb: {
+                type: Sequelize.FLOAT,
                 allowNull: false,
             },
             createdAt: {
