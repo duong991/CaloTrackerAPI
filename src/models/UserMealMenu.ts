@@ -20,15 +20,15 @@ class UserMealMenu
     public static associate = () => {
         UserMealMenu.belongsTo(UserMenu, {
             foreignKey: 'menuId',
-            as: 'UserMenu',
+            as: 'userMenu',
         });
         UserMealMenu.belongsTo(Meal, {
             foreignKey: 'mealId',
-            as: 'Meal',
+            as: 'meal',
         });
         UserMealMenu.belongsTo(UserMeal, {
             foreignKey: 'userMealId',
-            as: 'UserMeal',
+            as: 'userMeal',
         });
     };
 }

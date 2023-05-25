@@ -2,8 +2,8 @@ import { Model, DataTypes } from 'sequelize';
 import { sequelize } from '../config/connectDB';
 import MealFood from './MealFood';
 import UserMealFood from './UserMealFood';
+import DailyCaloFoodMapping from './DailyCaloFoodMapping';
 import { FoodAttributes } from '../interfaces/models/model.interface';
-
 class Food extends Model<FoodAttributes> implements FoodAttributes {
     public id!: number;
     public name!: string;
@@ -16,10 +16,17 @@ class Food extends Model<FoodAttributes> implements FoodAttributes {
     public readonly updatedAt!: Date;
 
     public static associate = () => {
-        Food.hasMany(MealFood, { foreignKey: 'foodId', as: 'MealFood' });
+        Food.hasMany(MealFood, {
+            foreignKey: 'foodId',
+            as: 'mealFoods',
+        });
+        Food.hasMany(DailyCaloFoodMapping, {
+            foreignKey: 'foodId',
+            as: 'dailyCaloFoodMappings',
+        });
         Food.hasMany(UserMealFood, {
             foreignKey: 'foodId',
-            as: 'UserMealFood',
+            as: 'userMealFoods',
         });
     };
 }

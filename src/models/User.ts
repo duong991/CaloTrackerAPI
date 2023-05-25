@@ -7,7 +7,7 @@ import UserExercise from './UserExercise';
 import WaterLog from './WaterLog';
 import UserFood from './UserFood';
 import UserMeal from './UserMeal';
-import DailyMenu from './DailyMenu';
+import DailyMenu from './DailyCalo';
 import UserMenu from './UserMenu';
 import Token from './Token';
 class User extends Model<UserAttributes> implements UserAttributes {
@@ -23,35 +23,35 @@ class User extends Model<UserAttributes> implements UserAttributes {
         User.hasOne(UserInfo, { foreignKey: 'userId', as: 'userInfo' });
         User.hasMany(UserExercise, {
             foreignKey: 'userId',
-            as: 'UserExercise',
+            as: 'userExercises',
         });
         User.hasMany(UserWeightHistory, {
             foreignKey: 'userId',
-            as: 'UserWeightHistory',
+            as: 'userWeightHistories',
         });
         User.hasMany(WaterLog, {
             foreignKey: 'userId',
-            as: 'WaterLog',
+            as: 'waterLogs',
         });
         User.hasMany(UserFood, {
             foreignKey: 'userId',
-            as: 'UserFood',
+            as: 'userFoods',
         });
         User.hasMany(UserMeal, {
             foreignKey: 'userId',
-            as: 'UserMeal',
+            as: 'userMeals',
         });
         User.hasMany(UserMenu, {
             foreignKey: 'userId',
-            as: 'UserMenu',
+            as: 'userMenus',
         });
         User.hasMany(DailyMenu, {
             foreignKey: 'userId',
-            as: 'DailyMenu',
+            as: 'dailyMenus',
         });
         User.hasMany(Token, {
             foreignKey: 'userId',
-            as: 'Token',
+            as: 'tokens',
         });
     };
 }

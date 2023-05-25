@@ -15,8 +15,12 @@ class MealFood extends Model<MealFoodAttributes> implements MealFoodAttributes {
     public readonly updatedAt!: Date;
 
     public static associate = () => {
-        MealFood.belongsTo(Meal, { foreignKey: 'mealId', as: 'Meal' });
-        MealFood.belongsTo(Food, { foreignKey: 'foodId', as: 'Food' });
+        MealFood.belongsTo(Meal, { foreignKey: 'mealId', as: 'meal' });
+        MealFood.belongsTo(Food, {
+            foreignKey: 'foodId',
+            targetKey: 'id',
+            as: 'food',
+        });
     };
 }
 

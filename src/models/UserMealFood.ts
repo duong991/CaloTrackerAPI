@@ -21,11 +21,12 @@ class UserMealFood
     public static associate = () => {
         UserMealFood.belongsTo(UserMeal, {
             foreignKey: 'mealId',
-            as: 'UserMeal',
+            as: 'userMeal',
         });
-        UserMealFood.belongsTo(Food, { foreignKey: 'foodId' });
+        UserMealFood.belongsTo(Food, { foreignKey: 'foodId', as: 'food' });
         UserMealFood.belongsTo(UserFood, {
             foreignKey: 'userFoodId',
+            as: 'userFood',
         });
     };
 }

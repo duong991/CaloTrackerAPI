@@ -5,7 +5,7 @@ import { WaterLogAttributes } from '../interfaces/models/model.interface';
 class WaterLog extends Model<WaterLogAttributes> implements WaterLogAttributes {
     public id!: number;
     public userId!: number;
-    public date!: Date;
+    public date!: string;
     public amount!: number;
 
     public readonly createdAt!: Date;

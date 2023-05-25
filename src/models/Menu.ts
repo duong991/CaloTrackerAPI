@@ -1,11 +1,11 @@
 import { DataTypes, Model } from 'sequelize';
 import { sequelize } from '../config/connectDB';
 import MealMenu from './MealMenu';
-import DailyMenu from './DailyMenu';
+import DailyCaloFoodMapping from './DailyCaloFoodMapping';
+
 import { MenuAttributes } from '../interfaces/models/model.interface';
 class Menu extends Model<MenuAttributes> implements MenuAttributes {
     public id!: number;
-    public userId!: number;
     public name!: string;
     public description!: string;
 
@@ -13,13 +13,13 @@ class Menu extends Model<MenuAttributes> implements MenuAttributes {
     public readonly updatedAt!: Date;
 
     public static associate = () => {
-        Menu.hasMany(MealMenu, { foreignKey: 'menuId', as: 'MealMenu' });
-        Menu.hasMany(DailyMenu, {
-            foreignKey: {
-                name: 'menuId',
-                allowNull: false,
-            },
-            onDelete: 'CASCADE',
+        Menu.hasMany(MealMenu, {
+            foreignKey: 'menuId',
+            as: 'mealMenus',
+        });
+        Menu.hasMany(DailyCaloFoodMapping, {
+            foreignKey: 'menuId',
+            as: 'dailyCaloFoodMappings',
         });
     };
 }

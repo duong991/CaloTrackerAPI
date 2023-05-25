@@ -3,6 +3,8 @@ import { sequelize } from '../config/connectDB';
 import MealFood from './MealFood';
 import MealMenu from './MealMenu';
 import UserMealMenu from './UserMealMenu';
+import DailyCaloFoodMapping from './DailyCaloFoodMapping';
+
 import { MealAttributes } from '../interfaces/models/model.interface';
 
 class Meal extends Model<MealAttributes> implements MealAttributes {
@@ -16,11 +18,21 @@ class Meal extends Model<MealAttributes> implements MealAttributes {
     public fat!: number;
     public mealType!: 'breakfast' | 'lunch' | 'dinner' | 'snacks';
     public static associate = () => {
-        Meal.hasMany(MealFood, { foreignKey: 'mealId', as: 'MealFood' });
-        Meal.hasMany(MealMenu, { foreignKey: 'mealId', as: 'MealMenu' });
+        Meal.hasMany(MealFood, {
+            foreignKey: 'mealId',
+            as: 'mealFoods',
+        });
+        Meal.hasMany(MealMenu, {
+            foreignKey: 'mealId',
+            as: 'mealMenus',
+        });
+        Meal.hasMany(DailyCaloFoodMapping, {
+            foreignKey: 'mealId',
+            as: 'dailyCaloFoodMappings',
+        });
         Meal.hasMany(UserMealMenu, {
             foreignKey: 'mealId',
-            as: 'UserMealMenu',
+            as: 'userMealMenus',
         });
     };
 }

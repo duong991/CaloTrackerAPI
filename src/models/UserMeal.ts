@@ -3,6 +3,8 @@ import { sequelize } from '../config/connectDB';
 import UserMealFood from './UserMealFood';
 import User from './User';
 import UserMealMenu from './UserMealMenu';
+import DailyCaloFoodMapping from './DailyCaloFoodMapping';
+
 import { UserMealAttributes } from '../interfaces/models/model.interface';
 class UserMeal extends Model<UserMealAttributes> implements UserMealAttributes {
     public id!: number;
@@ -23,11 +25,15 @@ class UserMeal extends Model<UserMealAttributes> implements UserMealAttributes {
         UserMeal.belongsTo(User, { foreignKey: 'userId', as: 'User' });
         UserMeal.hasMany(UserMealFood, {
             foreignKey: 'mealId',
-            as: 'UserMealFood',
+            as: 'userMealFoods',
         });
         UserMeal.hasMany(UserMealMenu, {
             foreignKey: 'userMealId',
-            as: 'UserMealMenu',
+            as: 'userMealMenus',
+        });
+        UserMeal.hasMany(DailyCaloFoodMapping, {
+            foreignKey: 'userMealId',
+            as: 'dailyCaloFoodMappings',
         });
     };
 }

@@ -14,7 +14,7 @@ class Exercise extends Model<ExerciseAttributes> implements ExerciseAttributes {
     public static associate = () => {
         Exercise.hasMany(UserExercise, {
             foreignKey: 'exerciseId',
-            as: 'UserExercise',
+            as: 'userExercises',
         });
     };
 }

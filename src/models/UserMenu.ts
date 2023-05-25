@@ -2,10 +2,12 @@ import { Model, DataTypes } from 'sequelize';
 import { sequelize } from '../config/connectDB';
 
 import User from './User';
-import DailyMenu from './DailyMenu';
-import { MenuAttributes } from '~/interfaces/models/model.interface';
+import DailyMenu from './DailyCalo';
+import DailyCaloFoodMapping from './DailyCaloFoodMapping';
+
+import { UserMenuAttributes } from '../interfaces/models/model.interface';
 import UserMealMenu from './UserMealMenu';
-class UserMenu extends Model {
+class UserMenu extends Model<UserMenuAttributes> implements UserMenuAttributes {
     public id!: number;
     public userId!: number;
     public name!: string;
@@ -18,16 +20,20 @@ class UserMenu extends Model {
     public static associate = () => {
         UserMenu.hasMany(DailyMenu, {
             foreignKey: 'menuId',
-            as: 'DailyMenu',
+            as: 'dailyMenus',
             onDelete: 'CASCADE',
         });
         UserMenu.hasMany(UserMealMenu, {
             foreignKey: 'menuId',
-            as: 'UserMealMenu',
+            as: 'userMealMenus',
             onDelete: 'CASCADE',
         });
 
-        UserMenu.belongsTo(User, { foreignKey: 'userId', as: 'User' });
+        UserMenu.belongsTo(User, { foreignKey: 'userId', as: 'user' });
+        UserMenu.hasMany(DailyCaloFoodMapping, {
+            foreignKey: 'userMealId',
+            as: 'dailyCaloFoodMappings',
+        });
     };
 }
 

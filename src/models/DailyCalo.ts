@@ -1,35 +1,31 @@
 import { Model, DataTypes } from 'sequelize';
 import { sequelize } from '../config/connectDB';
+import { DailyCaloAttributes } from '../interfaces/models/model.interface';
 import User from './User';
-import Exercise from './Exercise';
-import { UserExrAttributes } from '../interfaces/models/model.interface';
-class UserExercise
-    extends Model<UserExrAttributes>
+import DailyCaloFoodMapping from './DailyCaloFoodMapping';
+
+class DailyCalo
+    extends Model<DailyCaloAttributes>
     // eslint-disable-next-line prettier/prettier
-    implements UserExrAttributes {
+    implements DailyCaloAttributes {
     public id!: number;
     public userId!: number;
-    public exerciseId!: number;
+    public totalCalo!: number;
     public date!: Date;
-    public duration!: number;
-
     public readonly createdAt!: Date;
     public readonly updatedAt!: Date;
 
     public static associate = () => {
-        UserExercise.belongsTo(User, {
-            foreignKey: 'userId',
-            as: 'user',
+        DailyCalo.hasMany(DailyCaloFoodMapping, {
+            foreignKey: 'dailyCaloId',
+            as: 'dailyCaloFoodMappings',
         });
 
-        UserExercise.belongsTo(Exercise, {
-            foreignKey: 'exerciseId',
-            as: 'exercise',
-        });
+        DailyCalo.belongsTo(User, { foreignKey: 'userId', as: 'user' });
     };
 }
 
-UserExercise.init(
+DailyCalo.init(
     {
         id: {
             type: DataTypes.INTEGER,
@@ -44,28 +40,20 @@ UserExercise.init(
                 key: 'id',
             },
         },
-        exerciseId: {
+        totalCalo: {
             type: DataTypes.INTEGER,
             allowNull: false,
-            references: {
-                model: Exercise,
-                key: 'id',
-            },
         },
         date: {
             type: DataTypes.DATEONLY,
             allowNull: false,
         },
-        duration: {
-            type: DataTypes.INTEGER,
-            allowNull: false,
-        },
     },
     {
-        modelName: 'UserExercise',
-        tableName: 'User_Exercises',
         sequelize,
+        modelName: 'DailyCalo',
+        tableName: 'Daily_Calos',
     },
 );
 
-export default UserExercise;
+export default DailyCalo;

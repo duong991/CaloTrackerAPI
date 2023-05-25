@@ -3,6 +3,8 @@ import { sequelize } from '../config/connectDB';
 
 import User from './User';
 import UserMealFood from './UserMealFood';
+import DailyCaloFoodMapping from './DailyCaloFoodMapping';
+
 import { UserFoodAttributes } from '../interfaces/models/model.interface';
 class UserFood extends Model<UserFoodAttributes> implements UserFoodAttributes {
     public id!: number;
@@ -18,11 +20,14 @@ class UserFood extends Model<UserFoodAttributes> implements UserFoodAttributes {
     public static associate = () => {
         UserFood.belongsTo(User, {
             foreignKey: 'userId',
-            as: 'User',
+            as: 'user',
         });
         UserFood.hasMany(UserMealFood, {
             foreignKey: 'mealId',
-            as: 'UserMealFood',
+            as: 'userMealFoods',
+        });
+        UserFood.hasMany(DailyCaloFoodMapping, {
+            foreignKey: 'dailyCaloFoodMappings',
         });
     };
 }
