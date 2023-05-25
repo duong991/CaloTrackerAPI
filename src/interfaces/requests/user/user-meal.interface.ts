@@ -1,6 +1,5 @@
 import { IUserMealFood, IUpdateUserMealFood } from './user-meal-food.interface';
 interface ICreateUserMealRequest {
-    userId: number;
     name: string;
     description?: string;
     image?: Buffer;

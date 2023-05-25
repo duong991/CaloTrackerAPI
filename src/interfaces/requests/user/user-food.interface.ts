@@ -1,5 +1,4 @@
-interface ICreateUserFood {
-    userId: number;
+interface IDataRequestUserFood {
     name: string;
     calories: number;
     protein: number;
@@ -7,12 +6,4 @@ interface ICreateUserFood {
     fat: number;
 }
 
-interface IUpdateUserFood {
-    name: string;
-    calories: number;
-    protein: number;
-    carbohydrates: number;
-    fat: number;
-}
-
-export { ICreateUserFood, IUpdateUserFood };
+export { IDataRequestUserFood };

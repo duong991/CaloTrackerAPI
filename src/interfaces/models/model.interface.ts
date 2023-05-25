@@ -1,12 +1,21 @@
-interface DailyMenuAttributes {
+interface DailyCaloAttributes {
     id?: number;
     userId: number;
-    menuId?: number;
-    userMenuId?: number;
+    totalCalo?: number;
     date: Date;
-    note?: string;
 }
 
+interface DailyCaloFoodMappingAttributes {
+    id?: number;
+    dailyCaloId: number;
+    foodId?: number;
+    userFoodId?: number;
+    mealId?: number;
+    userMealId?: number;
+    menuId?: number;
+    userMenuId?: number;
+    servingSize?: number;
+}
 interface ExerciseAttributes {
     id?: number;
     name: string;
@@ -47,13 +56,6 @@ interface MealAttributes {
 
 interface MenuAttributes {
     id?: number;
-    name: string;
-    description?: string;
-}
-
-interface UserMenuAttributes {
-    id?: number;
-    userId: number;
     name: string;
     description?: string;
 }
@@ -104,8 +106,14 @@ interface UserInfoAttributes {
     userId: number;
     weight: number;
     height: number;
+    gender: boolean;
     activityLevel: string;
     BMR: number;
+    target: 'Giảm cân' | 'Tăng cân' | 'Giữ nguyên cân nặng';
+    lastTimeToUpdate: string;
+    protein: number;
+    fat: number;
+    carb: number;
 }
 interface UserMealAttributes {
     id?: number;
@@ -120,21 +128,29 @@ interface UserMealAttributes {
     mealType: 'breakfast' | 'lunch' | 'dinner' | 'snacks';
 }
 
+interface UserMenuAttributes {
+    id?: number;
+    userId: number;
+    name: string;
+    description?: string;
+}
+
 interface UserWeightHistoryAttributes {
     id?: number;
     userId: number;
-    date: number;
+    date: Date;
     weight: number;
 }
 interface WaterLogAttributes {
     id?: number;
     userId: number;
-    date: Date;
+    date: string;
     amount: number;
 }
 
 export {
-    DailyMenuAttributes,
+    DailyCaloAttributes,
+    DailyCaloFoodMappingAttributes,
     ExerciseAttributes,
     FoodAttributes,
     UserFoodAttributes,
