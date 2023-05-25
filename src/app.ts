@@ -10,7 +10,7 @@ import dotenv from 'dotenv';
 
 // Import các model cần gọi hàm associate()
 import User from './models/User';
-import DailyMenu from './models/DailyMenu';
+import UserInfo from './models/UserInfo';
 import Exercise from './models/Exercise';
 import Food from './models/Food';
 import Meal from './models/Meal';
@@ -24,25 +24,40 @@ import UserMealMenu from './models/UserMealMenu';
 import WaterLog from './models/WaterLog';
 import UserWeightHistory from './models/UserWeightHistory';
 import UserMenu from './models/UserMenu';
+import DailyCalo from './models/DailyCalo';
+import DailyCaloFoodMapping from './models/DailyCaloFoodMapping';
+import MealFood from './models/MealFood';
+import MealMenu from './models/MealMenu';
 dotenv.config();
 
 const app = express();
 
 // Gọi hàm associate() cho các model đã import
+Token.associate();
 User.associate();
-DailyMenu.associate();
+UserInfo.associate();
+
 Exercise.associate();
+UserExercise.associate();
+
 Food.associate();
 UserFood.associate();
+
 Meal.associate();
 UserMeal.associate();
+
 Menu.associate();
 UserMenu.associate();
-UserExercise.associate();
+
+MealFood.associate();
 UserMealFood.associate();
+MealMenu.associate();
 UserMealMenu.associate();
+
+DailyCalo.associate();
+DailyCaloFoodMapping.associate();
+
 UserWeightHistory.associate();
-Token.associate();
 WaterLog.associate();
 
 cronJobDeleteExpiredTokens.start();

@@ -21,8 +21,8 @@ const ExrManageService: IExrManageService = {
     },
 
     getAllExr: async (): Promise<Exercise[] | null> => {
-        const accounts = await Exercise.findAll();
-        return accounts;
+        const exercises = await Exercise.findAll();
+        return exercises;
     },
     createExr: async (req: ICreateExr): Promise<Exercise | boolean> => {
         const { name, caloriesBurned, duration } = req;

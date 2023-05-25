@@ -1,12 +1,16 @@
 import UserInfo from '../../models/UserInfo';
-import UpdateInfoUserRequest from '../../interfaces/UpdateInfoUserRequest';
+import { IUpdateInfoUserRequest } from '../../interfaces/requests/user/user-info.interface';
 
 interface UserService {
     getUserInfo: (userId: number) => Promise<UserInfo | null>;
+    createUserInfo: (
+        userId: number,
+        userInfo: IUpdateInfoUserRequest,
+    ) => Promise<UserInfo>;
     updateUserInfo: (
         userId: number,
-        userInfo: UpdateInfoUserRequest,
-    ) => Promise<any>;
+        userInfo: IUpdateInfoUserRequest,
+    ) => Promise<number>;
 }
 
 const UserService: UserService = {
@@ -20,11 +24,39 @@ const UserService: UserService = {
                 'activityLevel',
                 'height',
                 'BMR',
+                'target',
+                'lastTimeToUpdate',
+                'protein',
+                'fat',
+                'carb',
             ],
         });
         return userInfo;
     },
-    async updateUserInfo(userId: number, userInfo: UpdateInfoUserRequest) {
+    async createUserInfo(
+        userId: number,
+        userInfo: IUpdateInfoUserRequest,
+    ): Promise<UserInfo> {
+        const newUserInfo = await UserInfo.create({
+            userId: userId,
+            weight: userInfo.weight,
+            height: userInfo.height,
+            gender: userInfo.gender,
+            activityLevel: userInfo.activityLevel,
+            BMR: userInfo.BMR,
+            target: userInfo.target,
+            lastTimeToUpdate: userInfo.lastTimeToUpdate,
+            protein: userInfo.protein,
+            fat: userInfo.fat,
+            carb: userInfo.carb,
+        });
+        return newUserInfo;
+    },
+
+    async updateUserInfo(
+        userId: number,
+        userInfo: IUpdateInfoUserRequest,
+    ): Promise<number> {
         const [updatedRows] = await UserInfo.update(userInfo, {
             where: { userId: userId },
             returning: true,
@@ -34,18 +66,7 @@ const UserService: UserService = {
             throw new Error('User not found');
         }
 
-        const updatedUserInfo = await UserInfo.findOne({
-            where: { id: userId },
-            attributes: [
-                'id',
-                'weight',
-                'height',
-                'activityLevel',
-                'otherInfo',
-            ],
-        });
-
-        return updatedUserInfo;
+        return updatedRows;
     },
 };
 

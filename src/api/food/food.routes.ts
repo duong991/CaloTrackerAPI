@@ -20,6 +20,7 @@ router.put(
     updateFoodValidator,
     controller.updateFood,
 );
-router.delete('/:', checkArrFoodOwnership, controller.deleteFoods);
+router.delete('/', checkArrFoodOwnership, controller.deleteFoods);
+router.delete('/:id', checkArrFoodOwnership, controller.deleteFoods);
 
 export { router as FoodRouter };

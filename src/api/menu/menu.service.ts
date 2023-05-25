@@ -10,6 +10,7 @@ import {
 import { Transaction } from 'sequelize';
 import { sequelize } from '../../config/connectDB';
 interface IUserMenuService {
+    getAllMenus(userId: number): Promise<UserMenu[]>;
     getAllMenusByUserId(userId: number): Promise<UserMenu[]>;
     getMenuById(id: number): Promise<UserMenu | null>;
     createMenu(req: ICreateUserMenuRequest): Promise<UserMenu>;
@@ -18,20 +19,26 @@ interface IUserMenuService {
 }
 
 const UserMenuService: IUserMenuService = {
+    getAllMenus: async (userId: number): Promise<UserMenu[]> => {
+        const menus = await UserMenu.findAll({
+            where: { userId: userId },
+        });
+        return menus;
+    },
     getAllMenusByUserId: async (userId: number): Promise<UserMenu[]> => {
         const menus = await UserMenu.findAll({
             where: { userId: userId },
             include: {
                 model: UserMealMenu,
-                as: 'UserMealMenu',
+                as: 'userMealMenus',
                 include: [
                     {
                         model: Meal,
-                        as: 'Meal',
+                        as: 'meal',
                     },
                     {
                         model: UserMeal,
-                        as: 'UserMeal',
+                        as: 'userMeal',
                     },
                 ],
             },
@@ -42,15 +49,15 @@ const UserMenuService: IUserMenuService = {
         const userMeal = await UserMenu.findByPk(id, {
             include: {
                 model: UserMealMenu,
-                as: 'UserMealMenu',
+                as: 'userMealMenus',
                 include: [
                     {
                         model: Meal,
-                        as: 'Meal',
+                        as: 'meal',
                     },
                     {
                         model: UserMeal,
-                        as: 'UserMeal',
+                        as: 'userMeal',
                     },
                 ],
             },

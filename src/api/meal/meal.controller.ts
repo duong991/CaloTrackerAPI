@@ -29,11 +29,15 @@ export class UserMealController {
         }
     }
     public async createMeal(req: Request, res: Response): Promise<Response> {
+        const userId = req.user.id;
         try {
-            const newMeal = await UserMealService.createMeal(req.body);
-            return res.status(201).json(newMeal);
+            await UserMealService.createMeal(userId, req.body);
+            return res.status(201).json({ message: 'Meal created' });
         } catch (err) {
             console.error(err);
+            if (err === 'Meal already exists') {
+                return res.status(409).json({ message: err });
+            }
             return res.status(500).json({ message: 'Server error' });
         }
     }

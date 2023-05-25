@@ -24,11 +24,15 @@ export class UserFoodController {
     }
 
     public async createFood(req: Request, res: Response): Promise<Response> {
+        const userId = req.user.id;
         try {
-            const food = await UserFoodService.createFood(req.body);
-            return res.status(201).json(food);
+            await UserFoodService.createFood(userId, req.body);
+            return res.status(201).json({ message: 'Food created' });
         } catch (err) {
             console.error(err);
+            if (err === 'Food already exists') {
+                return res.status(409).json({ message: err });
+            }
             return res.status(500).json({ message: 'Server error' });
         }
     }
@@ -40,8 +44,22 @@ export class UserFoodController {
                 foodId,
                 req.body,
             );
+            if (!updatedFood)
+                return res.status(404).json({ message: 'Food not found' });
+            return res.status(200).json({ message: 'Food updated' });
+        } catch (err) {
+            console.error(err);
+            return res.status(500).json({ message: 'Server error' });
+        }
+    }
 
-            return res.status(200).json(updatedFood);
+    public async deleteFood(req: Request, res: Response): Promise<Response> {
+        const foodId = +req.params.id;
+        try {
+            const deleteFood = await UserFoodService.deleteFood(foodId);
+            if (!deleteFood)
+                return res.status(404).json({ message: 'Food not found' });
+            return res.status(200).json({ message: 'Food deleted' });
         } catch (err) {
             console.error(err);
             return res.status(500).json({ message: 'Server error' });

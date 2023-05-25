@@ -8,6 +8,7 @@ import {
 import { Transaction } from 'sequelize';
 import { sequelize } from '../../../config/connectDB';
 interface IMenuManagerService {
+    getTableMenus(): Promise<Menu[]>;
     getAllMenus(): Promise<Menu[]>;
     getMenuById(id: number): Promise<Menu | null>;
     createMenu(req: ICreateMenuRequest): Promise<Menu>;
@@ -16,15 +17,19 @@ interface IMenuManagerService {
 }
 
 const MenuManagerService: IMenuManagerService = {
+    getTableMenus: async (): Promise<Menu[]> => {
+        const menus = await Menu.findAll();
+        return menus;
+    },
     getAllMenus: async (): Promise<Menu[]> => {
         const menus = await Menu.findAll({
             include: {
                 model: MealMenu,
-                as: 'MealMenu',
+                as: 'mealMenus',
                 include: [
                     {
                         model: Meal,
-                        as: 'Meal',
+                        as: 'meal',
                     },
                 ],
             },
@@ -35,11 +40,11 @@ const MenuManagerService: IMenuManagerService = {
         const menu = await Menu.findByPk(id, {
             include: {
                 model: MealMenu,
-                as: 'MealMenu',
+                as: 'mealMenus',
                 include: [
                     {
                         model: Meal,
-                        as: 'Meal',
+                        as: 'meal',
                     },
                 ],
             },

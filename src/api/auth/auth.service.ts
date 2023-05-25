@@ -5,30 +5,34 @@ import {
     createAccessToken,
     createRefreshToken,
 } from '../../utils/auth/generateToken';
+import ILoginResponse from '../../interfaces/requests/auth/login.interface';
 interface AuthService {
-    register: (username: string, password: string) => Promise<User | boolean>;
-    login: (username: string, password: string) => Promise<object>;
+    register: (username: string, password: string) => Promise<boolean>;
+    login: (username: string, password: string) => Promise<ILoginResponse>;
 }
 
+const saltRounds = 10;
+
 const AuthService: AuthService = {
-    register: async (
-        username: string,
-        password: string,
-    ): Promise<User | boolean> => {
+    register: async (username: string, password: string): Promise<boolean> => {
         const user: User | null = await User.findOne({
             where: { username: username },
         });
         if (user) {
             return false;
         }
-        const newUser = await User.create({
+        const hashedPassword = await bcrypt.hash(password, saltRounds);
+        await User.create({
             username: username,
-            password: password,
+            password: hashedPassword,
             role: false,
         });
-        return newUser;
+        return true;
     },
-    login: async (username: string, password: string): Promise<object> => {
+    login: async (
+        username: string,
+        password: string,
+    ): Promise<ILoginResponse> => {
         const user: User | null = await User.findOne({
             where: { username: username },
             raw: true,

@@ -11,6 +11,7 @@ import { Transaction } from 'sequelize';
 import { sequelize } from '../../../config/connectDB';
 
 interface IMealManagerService {
+    getTableMeals(): Promise<Meal[]>;
     getAllMeals(): Promise<Meal[]>;
     getMealById(id: number): Promise<Meal | null>;
     createMeal(req: ICreateMealRequest): Promise<Meal>;
@@ -19,22 +20,24 @@ interface IMealManagerService {
 }
 
 const MealManagerService: IMealManagerService = {
+    getTableMeals: async (): Promise<Meal[]> => {
+        const meals = await Meal.findAll();
+        return meals;
+    },
     getAllMeals: async (): Promise<Meal[]> => {
         const meals = await Meal.findAll({
-            include: {
-                model: MealFood,
-                as: 'MealFood',
-                include: [
-                    {
-                        model: Food,
-                        as: 'Food',
-                    },
-                    {
-                        model: Food,
-                        as: 'Food',
-                    },
-                ],
-            },
+            include: [
+                {
+                    model: MealFood,
+                    as: 'mealFoods',
+                    include: [
+                        {
+                            model: Food,
+                            as: 'food',
+                        },
+                    ],
+                },
+            ],
         });
         return meals;
     },
@@ -43,15 +46,11 @@ const MealManagerService: IMealManagerService = {
             include: [
                 {
                     model: MealFood,
-                    as: 'MealFood',
+                    as: 'mealFoods',
                     include: [
                         {
                             model: Food,
-                            as: 'Food',
-                        },
-                        {
-                            model: Food,
-                            as: 'Food',
+                            as: 'food',
                         },
                     ],
                 },

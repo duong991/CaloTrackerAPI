@@ -1,6 +1,5 @@
 import { Request, Response } from 'express';
 import AuthService from './auth.service';
-
 export default class AuthController {
     public async register(req: Request, res: Response): Promise<Response> {
         const { email, password } = req.body;
@@ -12,13 +11,13 @@ export default class AuthController {
         }
 
         try {
-            const newUser = await AuthService.register(email, password);
-            if (!newUser) {
+            const isCreate = await AuthService.register(email, password);
+            if (!isCreate) {
                 return res
                     .status(400)
                     .json({ message: 'Email already exists' });
             }
-            return res.status(201).json(newUser);
+            return res.status(201).json({ message: 'Create success' });
         } catch (err) {
             console.error(err);
             return res.status(500).json({ message: 'Server error' });
@@ -26,15 +25,20 @@ export default class AuthController {
     }
 
     public async login(req: Request, res: Response): Promise<Response> {
-        const { username, password } = req.body;
+        const { email, password } = req.body;
         try {
-            if (!username || !password) {
+            if (!email || !password) {
                 return res
                     .status(400)
                     .json({ message: 'Username and password are required' });
             }
-            const token = await AuthService.login(username, password);
-            return res.status(200).json({ token });
+            const { accessToken, refreshToken } = await AuthService.login(
+                email,
+                password,
+            );
+            return res
+                .status(200)
+                .json({ accessToken: accessToken, refreshToken: refreshToken });
         } catch (error: any) {
             console.error(error);
             if (error.message === 'Tên người dùng hoặc mật khẩu không hợp lệ') {

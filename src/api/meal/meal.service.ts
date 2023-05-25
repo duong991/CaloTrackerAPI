@@ -11,28 +11,42 @@ import {
 import { Transaction } from 'sequelize';
 import { sequelize } from '../../config/connectDB';
 interface IUserMealService {
+    getAllMeals(userId: number): Promise<UserMeal[]>;
     getAllMealsByUserId(userId: number): Promise<UserMeal[]>;
     getMealById(id: number): Promise<UserMeal | null>;
-    createMeal(req: ICreateUserMealRequest): Promise<UserMeal>;
+    createMeal(
+        userId: number,
+        data: ICreateUserMealRequest,
+    ): Promise<UserMeal | Error>;
     updateMeal(mealId: number, req: IUpdateUserMealRequest): Promise<boolean>;
     deleteMeal(mealId: number): Promise<boolean>;
 }
 
 const UserMealService: IUserMealService = {
+    getAllMeals: async (userId: number): Promise<UserMeal[]> => {
+        const meals = await UserMeal.findAll({
+            where: { userId: userId },
+            include: {
+                model: UserMealFood,
+                as: 'userMealFoods',
+            },
+        });
+        return meals;
+    },
     getAllMealsByUserId: async (userId: number): Promise<UserMeal[]> => {
         const meals = await UserMeal.findAll({
             where: { userId: userId },
             include: {
                 model: UserMealFood,
-                as: 'UserMealFood',
+                as: 'userMealFoods',
                 include: [
                     {
                         model: Food,
-                        as: 'Food',
+                        as: 'food',
                     },
                     {
                         model: UserFood,
-                        as: 'UserFood',
+                        as: 'userFood',
                     },
                 ],
             },
@@ -44,30 +58,27 @@ const UserMealService: IUserMealService = {
             include: [
                 {
                     model: UserMealFood,
-                    as: 'UserMealFood',
+                    as: 'userMealFoods',
                     include: [
                         {
                             model: Food,
-                            as: 'Food',
+                            as: 'food',
                         },
                         {
                             model: UserFood,
-                            as: 'UserFood',
+                            as: 'userFood',
                         },
                     ],
-                },
-                {
-                    model: UserMealMenu,
-                    as: 'UserMealMenu',
-                    include: [{ model: UserMenu, as: 'UserMenu' }],
                 },
             ],
         });
         return userMeal;
     },
-    createMeal: async (req: ICreateUserMealRequest): Promise<UserMeal> => {
+    createMeal: async (
+        userId: number,
+        data: ICreateUserMealRequest,
+    ): Promise<UserMeal | Error> => {
         const {
-            userId,
             name,
             description,
             image,
@@ -77,7 +88,18 @@ const UserMealService: IUserMealService = {
             fat,
             mealType,
             userMealFood,
-        } = req;
+        } = data;
+        const isExist = await UserMeal.findOne({
+            where: {
+                name: name,
+                userId: userId,
+            },
+        });
+
+        if (!isExist) {
+            throw new Error('Meal already exists');
+        }
+
         const newMeal = await UserMeal.create({
             userId,
             name,
@@ -104,6 +126,7 @@ const UserMealService: IUserMealService = {
         mealId: number,
         req: IUpdateUserMealRequest,
     ): Promise<boolean> => {
+        // tạo transaction để đảm bảo tính toàn vẹn dữ liệu
         const t: Transaction = await sequelize.transaction();
         const {
             name,

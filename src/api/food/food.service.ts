@@ -1,14 +1,18 @@
 import UserFood from '../../models/UserFood';
 import { Op } from 'sequelize';
-import {
-    ICreateUserFood,
-    IUpdateUserFood,
-} from '../../interfaces/requests/user/user-food.interface';
+import { IDataRequestUserFood } from '../../interfaces/requests/user/user-food.interface';
 interface IUserFoodService {
     getAllFoods: (userId: number) => Promise<UserFood[] | null>;
     getFoodById: (id: number) => Promise<UserFood | null>;
-    createFood: (req: ICreateUserFood) => Promise<UserFood>;
-    updateFood: (id: number, req: IUpdateUserFood) => Promise<UserFood | null>;
+    createFood: (
+        userId: number,
+        data: IDataRequestUserFood,
+    ) => Promise<UserFood | Error>;
+    updateFood: (
+        id: number,
+        req: IDataRequestUserFood,
+    ) => Promise<UserFood | null>;
+    deleteFood: (id: number) => Promise<boolean>;
     deleteFoods: (ids: number[]) => Promise<number>;
     checkUserFoods: (ids: number[], userId: number) => Promise<boolean>;
 }
@@ -25,8 +29,20 @@ const UserFoodService: IUserFoodService = {
         return food;
     },
 
-    createFood: async (req: ICreateUserFood) => {
-        const { userId, name, calories, protein, carbohydrates, fat } = req;
+    createFood: async (
+        userId: number,
+        data: IDataRequestUserFood,
+    ): Promise<UserFood | Error> => {
+        const { name, calories, protein, carbohydrates, fat } = data;
+        const isExist = await UserFood.findOne({
+            where: {
+                name: name,
+                userId: userId,
+            },
+        });
+        if (isExist) {
+            throw new Error('Food already exists');
+        }
         return await UserFood.create({
             userId: userId,
             name: name,
@@ -37,7 +53,7 @@ const UserFoodService: IUserFoodService = {
         });
     },
 
-    updateFood: async (id: number, req: IUpdateUserFood) => {
+    updateFood: async (id: number, req: IDataRequestUserFood) => {
         const { name, calories, protein, carbohydrates, fat } = req;
         const foodToUpdate = await UserFood.findByPk(id);
 
@@ -55,7 +71,14 @@ const UserFoodService: IUserFoodService = {
 
         return foodToUpdate;
     },
-
+    deleteFood: async (id: number) => {
+        const numDeleted = await UserFood.destroy({
+            where: {
+                id: id,
+            },
+        });
+        return numDeleted > 0;
+    },
     deleteFoods: async (ids: number[]) => {
         const numDeleted = await UserFood.destroy({
             where: {
