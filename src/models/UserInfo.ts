@@ -8,8 +8,12 @@ class UserInfo extends Model<UserInfoAttributes> implements UserInfoAttributes {
     public weight!: number;
     public height!: number;
     public gender!: boolean;
-    public activityLevel!: string;
-    public BMR!: number;
+    public activityLevel!:
+        | 'Rất ít hoạt động'
+        | 'Ít hoạt động'
+        | 'Hoạt động vừa phải'
+        | 'Hoạt động nhiều'
+        | 'Hoạt động tích cực';
     public target!: 'Giảm cân' | 'Tăng cân' | 'Giữ nguyên cân nặng';
     public lastTimeToUpdate!: string;
     public protein!: number;
@@ -58,10 +62,6 @@ UserInfo.init(
                 'active',
                 'veryActive',
             ),
-            allowNull: false,
-        },
-        BMR: {
-            type: DataTypes.INTEGER,
             allowNull: false,
         },
         target: {

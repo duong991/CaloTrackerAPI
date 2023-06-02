@@ -11,7 +11,7 @@ class UserMeal extends Model<UserMealAttributes> implements UserMealAttributes {
     public userId!: number;
     public name!: string;
     public description?: string;
-    public image?: Buffer;
+    public image?: Blob;
     public calories!: number;
     public protein!: number;
     public carbohydrates!: number;

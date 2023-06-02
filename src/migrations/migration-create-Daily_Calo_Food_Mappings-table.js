@@ -2,7 +2,7 @@
 
 module.exports = {
     up: async (queryInterface, Sequelize) => {
-        await queryInterface.createTable('Daily_Calo_Food_Mappings', {
+        await queryInterface.createTable('calo_intake_mappings', {
             id: {
                 type: Sequelize.INTEGER,
                 autoIncrement: true,
@@ -55,6 +55,6 @@ module.exports = {
     },
 
     down: async (queryInterface, Sequelize) => {
-        await queryInterface.dropTable('Daily_Calo_Food_Mappings');
+        await queryInterface.dropTable('calo_intake_mappings');
     },
 };

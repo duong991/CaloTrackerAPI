@@ -6,7 +6,7 @@ import { UserWeightHistoryAttributes } from '../interfaces/models/model.interfac
 class UserWeightHistory extends Model<UserWeightHistoryAttributes> implements UserWeightHistoryAttributes {
     public id!: number;
     public userId!: number;
-    public date!: Date;
+    public date!: string;
     public weight!: number;
 
     public readonly createdAt!: Date;
@@ -35,7 +35,7 @@ UserWeightHistory.init(
             },
         },
         date: {
-            type: DataTypes.DATE,
+            type: DataTypes.STRING,
             allowNull: false,
         },
         weight: {

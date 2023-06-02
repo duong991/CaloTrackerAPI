@@ -10,8 +10,9 @@ class DailyCalo
     implements DailyCaloAttributes {
     public id!: number;
     public userId!: number;
-    public totalCalo!: number;
-    public date!: Date;
+    public caloriesIntake!: number;
+    public caloriesConsumed!: number;
+    public date!: string;
     public readonly createdAt!: Date;
     public readonly updatedAt!: Date;
 
@@ -40,12 +41,16 @@ DailyCalo.init(
                 key: 'id',
             },
         },
-        totalCalo: {
+        caloriesIntake: {
+            type: DataTypes.INTEGER,
+            allowNull: false,
+        },
+        caloriesConsumed: {
             type: DataTypes.INTEGER,
             allowNull: false,
         },
         date: {
-            type: DataTypes.DATEONLY,
+            type: DataTypes.STRING,
             allowNull: false,
         },
     },

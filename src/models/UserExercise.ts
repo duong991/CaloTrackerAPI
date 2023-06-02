@@ -10,7 +10,7 @@ class UserExercise
     public id!: number;
     public userId!: number;
     public exerciseId!: number;
-    public date!: Date;
+    public date!: string;
     public duration!: number;
 
     public readonly createdAt!: Date;
@@ -53,7 +53,7 @@ UserExercise.init(
             },
         },
         date: {
-            type: DataTypes.DATEONLY,
+            type: DataTypes.STRING,
             allowNull: false,
         },
         duration: {

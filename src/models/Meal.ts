@@ -11,7 +11,7 @@ class Meal extends Model<MealAttributes> implements MealAttributes {
     public id!: number;
     public name!: string;
     public description?: string;
-    public image?: Buffer; // khai báo image là kiểu Buffer
+    public image?: Blob; // khai báo image là kiểu Buffer
     public calories!: number;
     public protein!: number;
     public carbohydrates!: number;
@@ -53,7 +53,7 @@ Meal.init(
             allowNull: false,
         },
         image: {
-            type: DataTypes.BLOB,
+            type: DataTypes.BLOB('long'),
             allowNull: true,
         },
         calories: {

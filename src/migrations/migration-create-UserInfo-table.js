@@ -34,10 +34,6 @@ module.exports = {
                 ),
                 allowNull: false,
             },
-            BMR: {
-                type: Sequelize.INTEGER,
-                allowNull: false,
-            },
             target: {
                 type: Sequelize.ENUM(
                     'Giảm cân',
