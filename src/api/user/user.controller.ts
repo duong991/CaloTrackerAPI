@@ -12,7 +12,7 @@ export default class UserController {
                         .status(404)
                         .json({ message: 'User info not found' });
                 }
-                return res.status(200).json(userInfo);
+                return res.status(200).json({ userInfo });
             } else {
                 return res.status(404).json({ message: 'User not found' });
             }
@@ -22,7 +22,11 @@ export default class UserController {
         }
     }
 
-    public async createUser(req: Request, res: Response): Promise<Response> {
+    public async createUserInfo(
+        req: Request,
+        res: Response,
+    ): Promise<Response> {
+        console.log(req.body);
         const user = req.user;
         try {
             if (user != undefined) {
@@ -58,7 +62,6 @@ export default class UserController {
             weight,
             height,
             activityLevel,
-            BMR,
             target,
             lastTimeToUpdate,
             gender,
@@ -71,7 +74,6 @@ export default class UserController {
                 weight,
                 height,
                 activityLevel,
-                BMR,
                 target,
                 gender,
                 lastTimeToUpdate,

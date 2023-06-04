@@ -4,9 +4,9 @@ import { WaterLogController } from './waterLog.controller';
 const router = express.Router();
 const controller = new WaterLogController();
 
-router.get('/', controller.getWaterLogByUserId);
-router.get('/date', controller.getWaterLogByDate);
+// router.get('/', controller.getWaterLogByUserId);
+router.get('/', controller.getWaterLogByDate);
 router.post('/', controller.createWaterLog);
-router.put('/:id', controller.updateWaterLog);
+router.put('/', controller.updateWaterLog);
 
 export { router as WaterLogRouter };

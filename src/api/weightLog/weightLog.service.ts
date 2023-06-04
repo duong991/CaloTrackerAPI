@@ -5,16 +5,16 @@ interface IUserWeightHistoryService {
     ) => Promise<UserWeightHistory[] | null>;
     getUserWeightHistoryByDate: (
         userId: number,
-        date: Date,
+        date: string,
     ) => Promise<UserWeightHistory | null>;
     createUserWeightHistory: (
         userId: number,
-        date: Date,
+        date: string,
         amount: number,
     ) => Promise<UserWeightHistory>;
     updateUserWeightHistory: (
         userId: number,
-        date: Date,
+        date: string,
         amount: number,
     ) => Promise<UserWeightHistory | null>;
 }
@@ -24,12 +24,13 @@ const userWeightHistoryService: IUserWeightHistoryService = {
     ): Promise<UserWeightHistory[] | null> => {
         const weightLogs = await UserWeightHistory.findAll({
             where: { userId: userId },
+            attributes: { exclude: ['createdAt', 'updatedAt'] },
         });
         return weightLogs;
     },
     getUserWeightHistoryByDate: async (
         userId: number,
-        date: Date,
+        date: string,
     ): Promise<UserWeightHistory | null> => {
         const weightLog = await UserWeightHistory.findOne({
             where: { userId: userId, date: date },
@@ -39,9 +40,15 @@ const userWeightHistoryService: IUserWeightHistoryService = {
 
     createUserWeightHistory: async (
         userId: number,
-        date: Date,
+        date: string,
         weight: number,
     ) => {
+        const isExist = await UserWeightHistory.findOne({
+            where: { userId: userId, date: date },
+        });
+        if (isExist) {
+            throw new Error('Weight log already exists');
+        }
         return await UserWeightHistory.create({
             userId: userId,
             date: date,
@@ -51,7 +58,7 @@ const userWeightHistoryService: IUserWeightHistoryService = {
 
     updateUserWeightHistory: async (
         userId: number,
-        date: Date,
+        date: string,
         weight: number,
     ) => {
         const weightLog = await UserWeightHistory.findOne({
@@ -59,7 +66,7 @@ const userWeightHistoryService: IUserWeightHistoryService = {
         });
 
         if (!weightLog) {
-            return null;
+            throw new Error('Weight log not found');
         }
 
         await weightLog.update({

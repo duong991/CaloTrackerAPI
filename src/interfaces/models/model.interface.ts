@@ -1,8 +1,10 @@
+/* eslint-disable prettier/prettier */
 interface DailyCaloAttributes {
     id?: number;
     userId: number;
-    totalCalo?: number;
-    date: Date;
+    caloriesIntake: number;
+    caloriesConsumed: number;
+    date: string;
 }
 
 interface DailyCaloFoodMappingAttributes {
@@ -46,7 +48,7 @@ interface MealAttributes {
     id?: number;
     name: string;
     description?: string;
-    image?: Buffer;
+    image?: Blob;
     calories: number;
     protein: number;
     carbohydrates: number;
@@ -98,7 +100,7 @@ interface UserExrAttributes {
     id?: number;
     userId: number;
     exerciseId: number;
-    date: Date;
+    date: string;
     duration: number;
 }
 interface UserInfoAttributes {
@@ -107,8 +109,12 @@ interface UserInfoAttributes {
     weight: number;
     height: number;
     gender: boolean;
-    activityLevel: string;
-    BMR: number;
+    activityLevel:
+    | 'Rất ít hoạt động'
+    | 'Ít hoạt động'
+    | 'Hoạt động vừa phải'
+    | 'Hoạt động nhiều'
+    | 'Hoạt động tích cực';
     target: 'Giảm cân' | 'Tăng cân' | 'Giữ nguyên cân nặng';
     lastTimeToUpdate: string;
     protein: number;
@@ -120,7 +126,7 @@ interface UserMealAttributes {
     userId: number;
     name: string;
     description?: string;
-    image?: Buffer;
+    image?: Blob;
     calories: number;
     protein: number;
     carbohydrates: number;
@@ -138,7 +144,7 @@ interface UserMenuAttributes {
 interface UserWeightHistoryAttributes {
     id?: number;
     userId: number;
-    date: Date;
+    date: string;
     weight: number;
 }
 interface WaterLogAttributes {

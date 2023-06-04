@@ -6,13 +6,11 @@ interface IUserWaterLogService {
         userId: number,
         date: string,
     ) => Promise<WaterLog | null>;
-    createWaterLog: (
-        userId: number,
-        data: IWaterLog,
-    ) => Promise<WaterLog | Error>;
+    createWaterLog: (userId: number, data: IWaterLog) => Promise<WaterLog>;
     updateWaterLog: (
-        waterLogId: number,
-        data: IWaterLog,
+        userId: number,
+        date: string,
+        amount: number,
     ) => Promise<WaterLog | null>;
 }
 const UserWaterLogService: IUserWaterLogService = {
@@ -35,30 +33,38 @@ const UserWaterLogService: IUserWaterLogService = {
     createWaterLog: async (
         userId: number,
         data: IWaterLog,
-    ): Promise<WaterLog | Error> => {
+    ): Promise<WaterLog> => {
         const isExist = await WaterLog.findOne({
-            where: { userId: userId, date: data.date },
+            where: {
+                userId: userId,
+                date: data.date,
+            },
         });
         if (isExist) {
-            throw new Error('Water log already exist');
+            throw new Error('Water log already exists');
+        } else {
+            return await WaterLog.create({
+                userId: userId,
+                date: data.date,
+                amount: data.amount,
+            });
         }
-        return await WaterLog.create({
-            userId: userId,
-            date: data.date,
-            amount: data.amount,
-        });
     },
 
-    updateWaterLog: async (waterLogId: number, data: IWaterLog) => {
-        const waterLogToUpdate = await WaterLog.findByPk(waterLogId);
+    updateWaterLog: async (userId: number, date: string, amount: number) => {
+        const waterLogToUpdate = await WaterLog.findOne({
+            where: {
+                userId: userId,
+                date: date,
+            },
+        });
 
         if (!waterLogToUpdate) {
             return null;
         }
 
         await waterLogToUpdate.update({
-            date: data.date,
-            amount: data.amount,
+            amount: amount,
         });
 
         return waterLogToUpdate;

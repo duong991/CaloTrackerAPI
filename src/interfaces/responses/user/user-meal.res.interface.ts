@@ -10,7 +10,7 @@ export interface IUserMealResponse {
     userId: number;
     name: string;
     description?: string;
-    image?: Buffer;
+    image?: Blob;
     calories: number;
     protein: number;
     carbohydrates: number;

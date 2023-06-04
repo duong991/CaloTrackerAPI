@@ -1,4 +1,8 @@
+import { sequelize } from '../../config/connectDB';
+import { Transaction } from 'sequelize';
+
 import UserInfo from '../../models/UserInfo';
+import UserWeightHistory from '../../models/UserWeightHistory';
 import { IUpdateInfoUserRequest } from '../../interfaces/requests/user/user-info.interface';
 
 interface UserService {
@@ -18,12 +22,10 @@ const UserService: UserService = {
         const userInfo: UserInfo | null = await UserInfo.findOne({
             where: { userId: userId },
             attributes: [
-                'id',
                 'userId',
                 'weight',
                 'activityLevel',
                 'height',
-                'BMR',
                 'target',
                 'lastTimeToUpdate',
                 'protein',
@@ -37,36 +39,92 @@ const UserService: UserService = {
         userId: number,
         userInfo: IUpdateInfoUserRequest,
     ): Promise<UserInfo> {
-        const newUserInfo = await UserInfo.create({
-            userId: userId,
-            weight: userInfo.weight,
-            height: userInfo.height,
-            gender: userInfo.gender,
-            activityLevel: userInfo.activityLevel,
-            BMR: userInfo.BMR,
-            target: userInfo.target,
-            lastTimeToUpdate: userInfo.lastTimeToUpdate,
-            protein: userInfo.protein,
-            fat: userInfo.fat,
-            carb: userInfo.carb,
-        });
-        return newUserInfo;
+        const t: Transaction = await sequelize.transaction();
+
+        try {
+            const newUserInfo = await UserInfo.create(
+                {
+                    userId: userId,
+                    weight: userInfo.weight,
+                    height: userInfo.height,
+                    gender: userInfo.gender,
+                    activityLevel: userInfo.activityLevel,
+                    target: userInfo.target,
+                    lastTimeToUpdate: userInfo.lastTimeToUpdate,
+                    protein: userInfo.protein,
+                    fat: userInfo.fat,
+                    carb: userInfo.carb,
+                },
+                { transaction: t },
+            );
+
+            await UserWeightHistory.create(
+                {
+                    userId: userId,
+                    weight: userInfo.weight,
+                    date: userInfo.lastTimeToUpdate, // Thay đổi theo ngày tạo mới
+                },
+                { transaction: t },
+            );
+
+            await t.commit();
+            return newUserInfo;
+        } catch (error) {
+            await t.rollback();
+            throw error;
+        }
     },
 
     async updateUserInfo(
         userId: number,
         userInfo: IUpdateInfoUserRequest,
     ): Promise<number> {
-        const [updatedRows] = await UserInfo.update(userInfo, {
-            where: { userId: userId },
-            returning: true,
-        });
+        const t: Transaction = await sequelize.transaction();
 
-        if (updatedRows === 0) {
-            throw new Error('User not found');
+        try {
+            const [updatedRows] = await UserInfo.update(userInfo, {
+                where: { userId: userId },
+                returning: true,
+                transaction: t,
+            });
+
+            if (updatedRows === 0) {
+                await t.rollback();
+                throw new Error('User not found');
+            }
+
+            const isExistWeightLog = await UserWeightHistory.findOne({
+                where: { userId: userId, date: userInfo.lastTimeToUpdate },
+            });
+            if (isExistWeightLog) {
+                await UserWeightHistory.update(
+                    {
+                        weight: userInfo.weight,
+                    },
+                    {
+                        where: {
+                            userId: userId,
+                            date: userInfo.lastTimeToUpdate,
+                        },
+                        transaction: t,
+                    },
+                );
+            } else {
+                await UserWeightHistory.create(
+                    {
+                        userId: userId,
+                        weight: userInfo.weight,
+                        date: userInfo.lastTimeToUpdate,
+                    },
+                    { transaction: t },
+                );
+            }
+            await t.commit();
+            return updatedRows;
+        } catch (error) {
+            await t.rollback();
+            throw error;
         }
-
-        return updatedRows;
     },
 };
 

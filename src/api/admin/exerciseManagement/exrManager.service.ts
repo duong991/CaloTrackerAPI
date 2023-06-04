@@ -4,8 +4,6 @@ import {
     IUpdateExr,
 } from '../../../interfaces/requests/admin/exr-interface';
 interface IExrManageService {
-    getExrById: (id: number) => Promise<Exercise | null>;
-    getAllExr: () => Promise<Exercise[] | null>;
     createExr: (req: ICreateExr) => Promise<Exercise | boolean>;
     updateExr: (
         exrId: number,
@@ -15,15 +13,6 @@ interface IExrManageService {
 }
 
 const ExrManageService: IExrManageService = {
-    getExrById: async (id: number): Promise<Exercise | null> => {
-        const exr = await Exercise.findByPk(id);
-        return exr;
-    },
-
-    getAllExr: async (): Promise<Exercise[] | null> => {
-        const exercises = await Exercise.findAll();
-        return exercises;
-    },
     createExr: async (req: ICreateExr): Promise<Exercise | boolean> => {
         const { name, caloriesBurned, duration } = req;
         const isExist = await Exercise.findOne({ where: { name: name } });

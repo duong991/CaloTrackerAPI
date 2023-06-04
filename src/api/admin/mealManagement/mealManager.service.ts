@@ -12,8 +12,6 @@ import { sequelize } from '../../../config/connectDB';
 
 interface IMealManagerService {
     getTableMeals(): Promise<Meal[]>;
-    getAllMeals(): Promise<Meal[]>;
-    getMealById(id: number): Promise<Meal | null>;
     createMeal(req: ICreateMealRequest): Promise<Meal>;
     updateMeal(mealId: number, req: IUpdateMealRequest): Promise<boolean>;
     deleteMeal(mealId: number): Promise<boolean>;
@@ -23,40 +21,6 @@ const MealManagerService: IMealManagerService = {
     getTableMeals: async (): Promise<Meal[]> => {
         const meals = await Meal.findAll();
         return meals;
-    },
-    getAllMeals: async (): Promise<Meal[]> => {
-        const meals = await Meal.findAll({
-            include: [
-                {
-                    model: MealFood,
-                    as: 'mealFoods',
-                    include: [
-                        {
-                            model: Food,
-                            as: 'food',
-                        },
-                    ],
-                },
-            ],
-        });
-        return meals;
-    },
-    getMealById: async (id: number): Promise<Meal | null> => {
-        const meal = await Meal.findByPk(id, {
-            include: [
-                {
-                    model: MealFood,
-                    as: 'mealFoods',
-                    include: [
-                        {
-                            model: Food,
-                            as: 'food',
-                        },
-                    ],
-                },
-            ],
-        });
-        return meal;
     },
     createMeal: async (req: ICreateMealRequest): Promise<Meal> => {
         const {

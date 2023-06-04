@@ -5,8 +5,6 @@ import {
 } from '../../../interfaces/requests/admin/food-interface';
 interface IFoodManageService {
     createFood: (req: ICreateFood) => Promise<Food | boolean>;
-    getFoodById: (id: number) => Promise<Food | null>;
-    getAllFood: () => Promise<Food[] | null>;
     updateFood: (id: number, req: IUpdateFood) => Promise<[number, Food[]]>;
     deleteFood: (id: number) => Promise<number>;
 }
@@ -26,16 +24,6 @@ const FoodManageService: IFoodManageService = {
             fat,
         });
         return newUser;
-    },
-
-    getFoodById: async (id: number): Promise<Food | null> => {
-        const food = await Food.findByPk(id);
-        return food;
-    },
-
-    getAllFood: async (): Promise<Food[] | null> => {
-        const foods = await Food.findAll();
-        return foods;
     },
 
     updateFood: async (

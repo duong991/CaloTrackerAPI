@@ -2,7 +2,7 @@ import { IUserMealFood, IUpdateUserMealFood } from './user-meal-food.interface';
 interface ICreateUserMealRequest {
     name: string;
     description?: string;
-    image?: Buffer;
+    image?: Blob;
     calories: number;
     protein: number;
     carbohydrates: number;
@@ -14,7 +14,7 @@ interface ICreateUserMealRequest {
 interface IUpdateUserMealRequest {
     name: string;
     description?: string;
-    image?: Buffer;
+    image?: Blob;
     calories: number;
     protein: number;
     carbohydrates: number;

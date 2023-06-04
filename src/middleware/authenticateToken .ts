@@ -19,6 +19,7 @@ const authenticateToken = async (
     const authHeader = req.headers['authorization'];
     const token = authHeader && authHeader.split(' ')[1];
     if (!token) {
+        console.log('Access token is missing');
         return res.status(401).json({ message: 'Access token is missing' });
     }
 
@@ -30,6 +31,7 @@ const authenticateToken = async (
         ) as UserPayload;
         const user = await User.findOne({ where: { id: decoded.id } });
         if (!user) {
+            console.log('Invalid token');
             return res.status(401).json({ message: 'Invalid token' });
         }
 

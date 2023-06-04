@@ -15,35 +15,6 @@ export default class FoodManageController {
         }
     }
 
-    public async getFoodById(req: Request, res: Response): Promise<Response> {
-        const id = Number(req.params.id);
-        try {
-            const food = await FoodManageService.getFoodById(id);
-
-            if (!food) {
-                return res.status(404).json({ message: 'Food not found' });
-            }
-
-            return res.status(200).json(food);
-        } catch (err) {
-            console.error(err);
-            return res.status(500).json({ message: 'Server error' });
-        }
-    }
-
-    public async getAllFood(
-        req: Request,
-        res: Response,
-    ): Promise<Response<any, Record<string, any>>> {
-        try {
-            const foods = await FoodManageService.getAllFood();
-            return res.status(200).json(foods);
-        } catch (err) {
-            console.error(err);
-            return res.status(500).json({ message: 'Server error' });
-        }
-    }
-
     public async updateFood(req: Request, res: Response): Promise<Response> {
         const id = Number(req.params.id);
 

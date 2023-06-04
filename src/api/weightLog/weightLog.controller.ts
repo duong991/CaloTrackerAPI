@@ -24,7 +24,7 @@ export class WeightLogController {
         res: Response,
     ): Promise<Response> {
         const userId = req.user.id;
-        const { date } = req.body;
+        const date = req.query.date as string;
         try {
             const weightLog =
                 await userWeightHistoryService.getUserWeightHistoryByDate(

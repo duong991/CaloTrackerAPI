@@ -14,21 +14,6 @@ interface AuthService {
 const saltRounds = 10;
 
 const AuthService: AuthService = {
-    register: async (username: string, password: string): Promise<boolean> => {
-        const user: User | null = await User.findOne({
-            where: { username: username },
-        });
-        if (user) {
-            return false;
-        }
-        const hashedPassword = await bcrypt.hash(password, saltRounds);
-        await User.create({
-            username: username,
-            password: hashedPassword,
-            role: false,
-        });
-        return true;
-    },
     login: async (
         username: string,
         password: string,
@@ -63,6 +48,22 @@ const AuthService: AuthService = {
             expires: new Date(),
         });
         return { accessToken, refreshToken };
+    },
+    register: async (username: string, password: string): Promise<boolean> => {
+        const user: User | null = await User.findOne({
+            where: { username: username },
+        });
+        if (user) {
+            return false;
+        }
+        const hashedPassword = await bcrypt.hash(password, saltRounds);
+        await User.create({
+            username: username,
+            password: hashedPassword,
+            role: false,
+        });
+        // AuthService.login(username, password);
+        return true;
     },
 };
 
