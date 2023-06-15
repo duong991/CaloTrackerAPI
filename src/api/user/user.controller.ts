@@ -4,6 +4,7 @@ import { IUpdateInfoUserRequest } from '../../interfaces/requests/user/user-info
 export default class UserController {
     public async getUserInfo(req: Request, res: Response): Promise<Response> {
         const user = req.user;
+        console.log(user);
         try {
             if (user != undefined) {
                 const userInfo = await UserService.getUserInfo(user.id);

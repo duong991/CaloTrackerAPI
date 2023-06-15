@@ -1,5 +1,5 @@
 interface IWaterLog {
-    date: string;
+    date: Date;
     amount: number;
 }
 

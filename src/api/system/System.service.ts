@@ -42,26 +42,25 @@ const SystemService: ISystemService = {
         return foods;
     },
     getAllMeals: async (): Promise<Meal[] | null> => {
-        const meals = await Meal.findAll(
-            applyExcludeTimestamps({
-                include: [
-                    {
-                        model: MealFood,
-                        as: 'mealFoods',
-                        include: [
-                            {
-                                model: Food,
-                                as: 'food',
-                                attributes: {
-                                    exclude: ['createdAt', 'updatedAt'],
-                                },
+        const meals = await Meal.findAll({
+            include: [
+                {
+                    model: MealFood,
+                    as: 'mealFoods',
+                    include: [
+                        {
+                            model: Food,
+                            as: 'food',
+                            attributes: {
+                                exclude: ['createdAt', 'updatedAt'],
                             },
-                        ],
-                        attributes: { exclude: ['createdAt', 'updatedAt'] },
-                    },
-                ],
-            }),
-        );
+                        },
+                    ],
+                    attributes: { exclude: ['createdAt', 'updatedAt'] },
+                },
+            ],
+            attributes: { exclude: ['createdAt', 'updatedAt', 'image'] },
+        });
         return meals;
     },
     getMealById: async (id: number): Promise<Meal | null> => {

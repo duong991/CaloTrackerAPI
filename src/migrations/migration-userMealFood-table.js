@@ -11,26 +11,14 @@ module.exports = {
             mealId: {
                 type: Sequelize.INTEGER,
                 allowNull: false,
-                // references: {
-                //     model: "UserMeal",
-                //     key: "id",
-                // },
             },
             foodId: {
                 type: Sequelize.INTEGER,
                 allowNull: true,
-                // references: {
-                //     model: "Food",
-                //     key: "id",
-                // },
             },
             userFoodId: {
                 type: Sequelize.INTEGER,
                 allowNull: true,
-                // references: {
-                //     model: "UserFood",
-                //     key: "id",
-                // },
             },
             servingSize: {
                 type: Sequelize.INTEGER,

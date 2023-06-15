@@ -10,14 +10,7 @@ module.exports = {
             },
             userId: {
                 allowNull: false,
-                // unique: true,
                 type: Sequelize.INTEGER,
-                // references: {
-                //     model: {
-                //         tableName: "Users",
-                //     },
-                //     key: "id",
-                // },
             },
             date: {
                 allowNull: false,
@@ -36,17 +29,6 @@ module.exports = {
                 type: Sequelize.DATE,
             },
         });
-        // await queryInterface.addConstraint("UserWeightHistories", {
-        //     fields: ["userId"],
-        //     type: "foreign key",
-        //     name: "UserWeightHistory_userId_fk",
-        //     references: {
-        //         table: "Users",
-        //         field: "id",
-        //     },
-        //     onDelete: "cascade",
-        //     onUpdate: "cascade",
-        // });
     },
     down: async (queryInterface, Sequelize) => {
         await queryInterface.dropTable('User_Weight_Histories');

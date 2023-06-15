@@ -28,9 +28,16 @@ import DailyCalo from './models/DailyCalo';
 import DailyCaloFoodMapping from './models/DailyCaloFoodMapping';
 import MealFood from './models/MealFood';
 import MealMenu from './models/MealMenu';
+import moment from 'moment-timezone';
+
+// Đặt múi giờ mặc định cho toàn bộ ứng dụng
+moment.tz.setDefault('Asia/Ho_Chi_Minh');
+
 dotenv.config();
 
 const app = express();
+
+console.log(moment().toDate());
 
 // Gọi hàm associate() cho các model đã import
 Token.associate();

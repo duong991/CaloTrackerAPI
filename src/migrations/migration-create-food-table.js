@@ -28,10 +28,6 @@ module.exports = {
                 type: Sequelize.FLOAT,
                 allowNull: false,
             },
-            foodType: {
-                type: Sequelize.STRING(255),
-                allowNull: false,
-            },
             createdAt: {
                 allowNull: false,
                 type: Sequelize.DATE,

@@ -2,29 +2,29 @@
 
 module.exports = {
     up: async (queryInterface, Sequelize) => {
-        await queryInterface.bulkInsert('User_Weight_Histories', [
-            {
-                userId: 1,
-                date: '2023-04-19',
-                role: true,
+        const userWeightHistoriesData = [];
+        const userId = 33;
+
+        for (let i = 0; i < 12; i++) {
+            const currentDate = new Date();
+            currentDate.setDate(currentDate.getDate() - i);
+
+            const userWeightHistory = {
+                userId: userId,
+                date: currentDate,
+                weight: 70.0 + i, // Ví dụ: Trọng lượng tăng dần từ 70.0 đến 81.0
                 createdAt: new Date(),
                 updatedAt: new Date(),
-            },
-            {
-                userId: 2,
-                date: '2023-04-20',
-                role: true,
-                createdAt: new Date(),
-                updatedAt: new Date(),
-            },
-            {
-                userId: 3,
-                date: '2023-04-21',
-                role: false,
-                createdAt: new Date(),
-                updatedAt: new Date(),
-            },
-        ]);
+            };
+
+            userWeightHistoriesData.push(userWeightHistory);
+        }
+
+        await queryInterface.bulkInsert(
+            'User_Weight_Histories',
+            userWeightHistoriesData,
+            {},
+        );
     },
 
     down: async (queryInterface, Sequelize) => {

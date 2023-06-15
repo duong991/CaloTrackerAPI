@@ -4,7 +4,7 @@ import { Transaction } from 'sequelize';
 import UserInfo from '../../models/UserInfo';
 import UserWeightHistory from '../../models/UserWeightHistory';
 import { IUpdateInfoUserRequest } from '../../interfaces/requests/user/user-info.interface';
-
+import convertToDate from '../../helpers/ConvertTime';
 interface UserService {
     getUserInfo: (userId: number) => Promise<UserInfo | null>;
     createUserInfo: (
@@ -58,11 +58,12 @@ const UserService: UserService = {
                 { transaction: t },
             );
 
+            const date = convertToDate(userInfo.lastTimeToUpdate);
             await UserWeightHistory.create(
                 {
                     userId: userId,
                     weight: userInfo.weight,
-                    date: userInfo.lastTimeToUpdate, // Thay đổi theo ngày tạo mới
+                    date, // Thay đổi theo ngày tạo mới
                 },
                 { transaction: t },
             );
@@ -97,6 +98,7 @@ const UserService: UserService = {
                 where: { userId: userId, date: userInfo.lastTimeToUpdate },
             });
             if (isExistWeightLog) {
+                const dateWeightLog = new Date();
                 await UserWeightHistory.update(
                     {
                         weight: userInfo.weight,
@@ -104,17 +106,18 @@ const UserService: UserService = {
                     {
                         where: {
                             userId: userId,
-                            date: userInfo.lastTimeToUpdate,
+                            date: dateWeightLog,
                         },
                         transaction: t,
                     },
                 );
             } else {
+                const date = convertToDate(userInfo.lastTimeToUpdate);
                 await UserWeightHistory.create(
                     {
                         userId: userId,
                         weight: userInfo.weight,
-                        date: userInfo.lastTimeToUpdate,
+                        date,
                     },
                     { transaction: t },
                 );

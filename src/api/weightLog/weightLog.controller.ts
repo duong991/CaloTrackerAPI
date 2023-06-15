@@ -12,7 +12,8 @@ export class WeightLogController {
                 await userWeightHistoryService.getUserWeightHistoryByUserId(
                     userId,
                 );
-            return res.status(201).json(weightLogs);
+            console.log(weightLogs);
+            return res.status(201).json({ items: weightLogs });
         } catch (err) {
             console.error(err);
             return res.status(500).json({ message: 'Server error' });

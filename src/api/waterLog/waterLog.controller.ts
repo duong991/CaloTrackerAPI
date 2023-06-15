@@ -1,5 +1,6 @@
 import { Request, Response } from 'express';
 import UserWaterLogService from './waterLog.service';
+import moment from 'moment-timezone';
 export class WaterLogController {
     public async getWaterLogByUserId(
         req: Request,
@@ -23,21 +24,19 @@ export class WaterLogController {
     ): Promise<Response> {
         const userId = req.user.id;
         const date = req.query.date as string;
+        const convertDate = new Date(date);
+
+        const today = moment().toDate().toISOString().slice(0, 10);
         try {
             const waterLog = await UserWaterLogService.getWaterLogByDate(
                 userId,
                 date,
             );
-            console.log(
-                waterLog,
-                date,
-                userId,
-                date === new Date().toISOString().slice(0, 10),
-            );
-            if (!waterLog && date === new Date().toISOString().slice(0, 10)) {
+
+            if (!waterLog && date === today) {
                 const newWaterLog = await UserWaterLogService.createWaterLog(
                     userId,
-                    { date: date, amount: 0 },
+                    { date: convertDate, amount: 0 },
                 );
                 return res.status(201).json({ amount: newWaterLog.amount });
             } else {

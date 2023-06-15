@@ -33,7 +33,7 @@ router.use('/manager-exercise', authenticateToken, isAdmin, ExrManageRouter);
 router.use('/manager-menu', authenticateToken, isAdmin, MenuManagerRouter);
 
 // router for user need to be protected by user role
-router.use('/system', SystemRouter);
+router.use('/system', authenticateToken, SystemRouter);
 router.use('/users', authenticateToken, UserRouter);
 router.use('/foods', authenticateToken, FoodRouter);
 router.use('/meals', authenticateToken, MealRouter);

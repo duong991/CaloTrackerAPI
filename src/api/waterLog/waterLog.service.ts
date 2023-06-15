@@ -9,7 +9,7 @@ interface IUserWaterLogService {
     createWaterLog: (userId: number, data: IWaterLog) => Promise<WaterLog>;
     updateWaterLog: (
         userId: number,
-        date: string,
+        date: Date,
         amount: number,
     ) => Promise<WaterLog | null>;
 }
@@ -51,14 +51,15 @@ const UserWaterLogService: IUserWaterLogService = {
         }
     },
 
-    updateWaterLog: async (userId: number, date: string, amount: number) => {
+    updateWaterLog: async (userId: number, date: Date, amount: number) => {
+        const convertDate = new Date(date).toISOString().slice(0, 10);
         const waterLogToUpdate = await WaterLog.findOne({
             where: {
                 userId: userId,
-                date: date,
+                date: convertDate,
             },
         });
-
+        console.log(waterLogToUpdate);
         if (!waterLogToUpdate) {
             return null;
         }

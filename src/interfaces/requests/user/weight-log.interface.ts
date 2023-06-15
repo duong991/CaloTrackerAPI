@@ -1,5 +1,5 @@
 interface IWeightLog {
-    date: string;
+    date: Date;
     weight: number;
 }
 

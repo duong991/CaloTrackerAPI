@@ -25,7 +25,7 @@ export default class SystemController {
     ): Promise<Response<any, Record<string, any>>> {
         try {
             const exercises = await SystemService.getAllExr();
-            return res.status(200).json({ exercises });
+            return res.status(200).json({ items: exercises });
         } catch (err) {
             console.error(err);
             return res.status(500).json({ message: 'Server error' });
@@ -54,7 +54,7 @@ export default class SystemController {
     ): Promise<Response<any, Record<string, any>>> {
         try {
             const foods = await SystemService.getAllFood();
-            return res.status(200).json(foods);
+            return res.status(200).json({ items: foods });
         } catch (err) {
             console.error(err);
             return res.status(500).json({ message: 'Server error' });
@@ -64,7 +64,7 @@ export default class SystemController {
     public async getMeals(req: Request, res: Response): Promise<Response> {
         try {
             const meals = await SystemService.getAllMeals();
-            return res.status(200).json(meals);
+            return res.status(200).json({ items: meals });
         } catch (err) {
             console.error(err);
             return res.status(500).json({ message: 'Server error' });

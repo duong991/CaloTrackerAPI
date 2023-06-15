@@ -5,7 +5,7 @@ import { WaterLogAttributes } from '../interfaces/models/model.interface';
 class WaterLog extends Model<WaterLogAttributes> implements WaterLogAttributes {
     public id!: number;
     public userId!: number;
-    public date!: string;
+    public date!: Date;
     public amount!: number;
 
     public readonly createdAt!: Date;
@@ -34,7 +34,7 @@ WaterLog.init(
             onDelete: 'CASCADE',
         },
         date: {
-            type: DataTypes.STRING,
+            type: DataTypes.DATE,
             allowNull: false,
         },
         amount: {

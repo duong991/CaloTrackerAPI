@@ -144,13 +144,13 @@ interface UserMenuAttributes {
 interface UserWeightHistoryAttributes {
     id?: number;
     userId: number;
-    date: string;
+    date: Date;
     weight: number;
 }
 interface WaterLogAttributes {
     id?: number;
     userId: number;
-    date: string;
+    date: Date;
     amount: number;
 }
 
