@@ -1,32 +1,25 @@
 'use strict';
+
 module.exports = {
     up: async (queryInterface, Sequelize) => {
-        await queryInterface.createTable('Meal_Foods', {
+        await queryInterface.createTable('Menus', {
             id: {
                 allowNull: false,
                 autoIncrement: true,
                 primaryKey: true,
                 type: Sequelize.INTEGER,
             },
-            mealId: {
-                type: Sequelize.INTEGER,
+            userId: {
                 allowNull: false,
-                // references: {
-                //     model: "Meal",
-                //     key: "id",
-                // },
+                type: Sequelize.INTEGER,
             },
-            foodId: {
-                type: Sequelize.INTEGER,
+            name: {
                 allowNull: false,
-                // references: {
-                //     model: "Food",
-                //     key: "id",
-                // },
+                type: Sequelize.STRING,
             },
-            servingSize: {
-                type: Sequelize.INTEGER,
+            description: {
                 allowNull: false,
+                type: Sequelize.TEXT,
             },
             createdAt: {
                 allowNull: false,
@@ -37,10 +30,9 @@ module.exports = {
                 type: Sequelize.DATE,
             },
         });
-        // await queryInterface.addIndex("MealFoods", ["mealId"]);
-        // await queryInterface.addIndex("MealFoods", ["foodId"]);
     },
+
     down: async (queryInterface, Sequelize) => {
-        await queryInterface.dropTable('Meal_Foods');
+        await queryInterface.dropTable('Menus');
     },
 };

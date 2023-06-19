@@ -11,10 +11,6 @@ module.exports = {
             userId: {
                 type: Sequelize.INTEGER,
                 allowNull: false,
-                // references: {
-                //     model: "User",
-                //     key: "id",
-                // },
             },
             name: {
                 type: Sequelize.STRING,
@@ -45,24 +41,9 @@ module.exports = {
                 allowNull: false,
             },
         });
-
-        // await queryInterface.addConstraint("UserFoods", {
-        //     type: "foreign key",
-        //     fields: ["userId"],
-        //     name: "user_food_user_id_fk",
-        //     references: {
-        //         table: "Users",
-        //         field: "id",
-        //     },
-        //     onDelete: "CASCADE",
-        // });
     },
 
     down: async (queryInterface, Sequelize) => {
-        await queryInterface.removeConstraint(
-            'UserFoods',
-            'user_food_user_id_fk',
-        );
         await queryInterface.dropTable('User_Foods');
     },
 };

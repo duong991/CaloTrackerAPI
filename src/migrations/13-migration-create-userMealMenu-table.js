@@ -11,32 +11,14 @@ module.exports = {
             menuId: {
                 type: Sequelize.INTEGER,
                 allowNull: false,
-                // references: {
-                //     model: "UserMenu",
-                //     key: "id",
-                // },
-                // onUpdate: "CASCADE",
-                // onDelete: "CASCADE",
             },
             mealId: {
                 type: Sequelize.INTEGER,
                 allowNull: false,
-                // references: {
-                //     model: "Meal",
-                //     key: "id",
-                // },
-                // onUpdate: "CASCADE",
-                // onDelete: "CASCADE",
             },
             userMealId: {
                 type: Sequelize.INTEGER,
                 allowNull: false,
-                // references: {
-                //     model: "UserMeal",
-                //     key: "id",
-                // },
-                // onUpdate: "CASCADE",
-                // onDelete: "CASCADE",
             },
             createdAt: {
                 type: Sequelize.DATE,

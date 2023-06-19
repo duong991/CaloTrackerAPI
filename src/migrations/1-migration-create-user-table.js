@@ -1,30 +1,24 @@
 'use strict';
-
 module.exports = {
     up: async (queryInterface, Sequelize) => {
-        await queryInterface.createTable('Water_Logs', {
+        await queryInterface.createTable('Users', {
             id: {
-                type: Sequelize.INTEGER,
+                allowNull: false,
                 autoIncrement: true,
                 primaryKey: true,
-            },
-            userId: {
                 type: Sequelize.INTEGER,
-                allowNull: false,
-                // references: {
-                //     model: "Users",
-                //     key: "id",
-                // },
-                // onUpdate: "CASCADE",
-                // onDelete: "CASCADE",
             },
-            date: {
-                type: Sequelize.DATEONLY,
+            username: {
                 allowNull: false,
+                type: Sequelize.STRING,
             },
-            amount: {
-                type: Sequelize.INTEGER,
+            password: {
                 allowNull: false,
+                type: Sequelize.STRING,
+            },
+            role: {
+                allowNull: false,
+                type: Sequelize.BOOLEAN,
             },
             createdAt: {
                 allowNull: false,
@@ -36,8 +30,7 @@ module.exports = {
             },
         });
     },
-
     down: async (queryInterface, Sequelize) => {
-        await queryInterface.dropTable('Water_Logs');
+        await queryInterface.dropTable('Users');
     },
 };

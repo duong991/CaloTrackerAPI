@@ -1,40 +1,28 @@
 'use strict';
 module.exports = {
     up: async (queryInterface, Sequelize) => {
-        await queryInterface.createTable('Meals', {
+        await queryInterface.createTable('User_Exercises', {
             id: {
                 allowNull: false,
                 autoIncrement: true,
                 primaryKey: true,
                 type: Sequelize.INTEGER,
             },
-            name: {
+            userId: {
+                type: Sequelize.INTEGER,
                 allowNull: false,
-                type: Sequelize.STRING(255),
             },
-            description: {
+            exerciseId: {
+                type: Sequelize.INTEGER,
                 allowNull: false,
-                type: Sequelize.TEXT,
             },
-            image: {
-                allowNull: true,
-                type: Sequelize.BLOB,
-            },
-            calories: {
+            date: {
+                type: Sequelize.DATEONLY,
                 allowNull: false,
-                type: Sequelize.FLOAT,
             },
-            protein: {
+            duration: {
+                type: Sequelize.INTEGER,
                 allowNull: false,
-                type: Sequelize.FLOAT,
-            },
-            carbohydrates: {
-                allowNull: false,
-                type: Sequelize.FLOAT,
-            },
-            fat: {
-                allowNull: false,
-                type: Sequelize.FLOAT,
             },
             createdAt: {
                 allowNull: false,
@@ -47,6 +35,6 @@ module.exports = {
         });
     },
     down: async (queryInterface, Sequelize) => {
-        await queryInterface.dropTable('Meals');
+        await queryInterface.dropTable('User_Exercises');
     },
 };

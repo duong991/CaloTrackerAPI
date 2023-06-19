@@ -2,31 +2,28 @@
 
 module.exports = {
     up: async (queryInterface, Sequelize) => {
-        await queryInterface.createTable('Meal_Menus', {
+        await queryInterface.createTable('User_Menus', {
             id: {
-                type: Sequelize.INTEGER,
-                primaryKey: true,
+                allowNull: false,
                 autoIncrement: true,
-            },
-            menuId: {
+                primaryKey: true,
                 type: Sequelize.INTEGER,
+            },
+            userId: {
                 allowNull: false,
+                type: Sequelize.INTEGER,
                 // references: {
-                //     model: "Menu",
+                //     model: "User",
                 //     key: "id",
                 // },
-                // onUpdate: "CASCADE",
-                // onDelete: "CASCADE",
             },
-            mealId: {
-                type: Sequelize.INTEGER,
+            name: {
                 allowNull: false,
-                // references: {
-                //     model: "Meal",
-                //     key: "id",
-                // },
-                // onUpdate: "CASCADE",
-                // onDelete: "CASCADE",
+                type: Sequelize.STRING(50),
+            },
+            description: {
+                allowNull: true,
+                type: Sequelize.TEXT,
             },
             createdAt: {
                 allowNull: false,
@@ -40,6 +37,6 @@ module.exports = {
     },
 
     down: async (queryInterface, Sequelize) => {
-        await queryInterface.dropTable('Meal_Menus');
+        await queryInterface.dropTable('User_Menus');
     },
 };

@@ -11,10 +11,6 @@ module.exports = {
             userId: {
                 type: Sequelize.INTEGER,
                 allowNull: false,
-                // references: {
-                //     model: "User",
-                //     key: "id",
-                // },
             },
             name: {
                 type: Sequelize.STRING(100),
@@ -42,6 +38,10 @@ module.exports = {
             },
             fat: {
                 type: Sequelize.FLOAT,
+                allowNull: false,
+            },
+            mealType: {
+                type: Sequelize.ENUM('breakfast', 'lunch', 'dinner', 'snack'),
                 allowNull: false,
             },
             createdAt: {

@@ -1,33 +1,44 @@
 'use strict';
-
 module.exports = {
     up: async (queryInterface, Sequelize) => {
-        await queryInterface.createTable('Menus', {
+        await queryInterface.createTable('Meals', {
             id: {
                 allowNull: false,
                 autoIncrement: true,
                 primaryKey: true,
                 type: Sequelize.INTEGER,
             },
-            userId: {
-                allowNull: false,
-                type: Sequelize.INTEGER,
-                // references: {
-                //     model: "User",
-                //     key: "id",
-                // },
-            },
             name: {
                 allowNull: false,
-                type: Sequelize.STRING,
+                type: Sequelize.STRING(255),
             },
             description: {
                 allowNull: false,
                 type: Sequelize.TEXT,
             },
-            mealType: {
+            image: {
+                allowNull: true,
+                type: Sequelize.BLOB,
+            },
+            calories: {
                 allowNull: false,
-                type: Sequelize.ENUM('breakfast', 'lunch', 'dinner', 'snacks'),
+                type: Sequelize.FLOAT,
+            },
+            protein: {
+                allowNull: false,
+                type: Sequelize.FLOAT,
+            },
+            carbohydrates: {
+                allowNull: false,
+                type: Sequelize.FLOAT,
+            },
+            fat: {
+                allowNull: false,
+                type: Sequelize.FLOAT,
+            },
+            mealType: {
+                type: Sequelize.ENUM('breakfast', 'lunch', 'dinner', 'snack'),
+                allowNull: false,
             },
             createdAt: {
                 allowNull: false,
@@ -39,8 +50,7 @@ module.exports = {
             },
         });
     },
-
     down: async (queryInterface, Sequelize) => {
-        await queryInterface.dropTable('Menus');
+        await queryInterface.dropTable('Meals');
     },
 };
