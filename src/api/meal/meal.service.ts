@@ -2,14 +2,15 @@ import UserMeal from '../../models/UserMeal';
 import UserMealFood from '../../models/UserMealFood';
 import Food from '../../models/Food';
 import UserFood from '../../models/UserFood';
-import UserMealMenu from '../../models/UserMealMenu';
-import UserMenu from '../../models/UserMenu';
+// import UserMealMenu from '../../models/UserMealMenu';
+// import UserMenu from '../../models/UserMenu';
 import {
     ICreateUserMealRequest,
     IUpdateUserMealRequest,
 } from '../../interfaces/requests/user/user-meal.interface';
 import { Transaction } from 'sequelize';
 import { sequelize } from '../../config/connectDB';
+import { Op } from 'sequelize';
 interface IUserMealService {
     getAllMeals(userId: number): Promise<UserMeal[]>;
     getAllMealsByUserId(userId: number): Promise<UserMeal[]>;
@@ -29,6 +30,9 @@ const UserMealService: IUserMealService = {
             include: {
                 model: UserMealFood,
                 as: 'userMealFoods',
+                attributes: {
+                    exclude: ['createdAt', 'updatedAt', 'mealId'],
+                },
             },
         });
         return meals;
@@ -36,19 +40,8 @@ const UserMealService: IUserMealService = {
     getAllMealsByUserId: async (userId: number): Promise<UserMeal[]> => {
         const meals = await UserMeal.findAll({
             where: { userId: userId },
-            include: {
-                model: UserMealFood,
-                as: 'userMealFoods',
-                include: [
-                    {
-                        model: Food,
-                        as: 'food',
-                    },
-                    {
-                        model: UserFood,
-                        as: 'userFood',
-                    },
-                ],
+            attributes: {
+                exclude: ['createdAt', 'updatedAt', 'userId', 'image'],
             },
         });
         return meals;
@@ -248,12 +241,7 @@ const UserMealService: IUserMealService = {
                 },
                 transaction: t,
             });
-            await UserMealMenu.destroy({
-                where: {
-                    mealId: mealId,
-                },
-                transaction: t,
-            });
+
             await UserMeal.destroy({
                 where: {
                     id: mealId,

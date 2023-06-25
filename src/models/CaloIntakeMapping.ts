@@ -1,63 +1,68 @@
 import { Model, DataTypes } from 'sequelize';
 import { sequelize } from '../config/connectDB';
-import { DailyCaloFoodMappingAttributes } from '../interfaces/models/model.interface';
+import { CaloIntakeMappingAttributes } from '../interfaces/models/model.interface';
 import Food from './Food';
 import UserFood from './UserFood';
 import UserMeal from './UserMeal';
-import UserMenu from './UserMenu';
-import Menu from './Menu';
+// import UserMenu from './UserMenu';
+// import Menu from './Menu';
 import Meal from './Meal';
 import DailyCalo from './DailyCalo';
-class DailyCaloFoodMapping
-    extends Model<DailyCaloFoodMappingAttributes>
+class CaloIntakeMapping
+    extends Model<CaloIntakeMappingAttributes>
     // eslint-disable-next-line prettier/prettier
-    implements DailyCaloFoodMappingAttributes {
+    implements CaloIntakeMappingAttributes {
     public id!: number;
     public dailyCaloId!: number;
     public foodId?: number;
     public userFoodId?: number;
     public mealId?: number;
     public userMealId?: number;
-    public menuId?: number;
-    public userMenuId?: number;
+    // public menuId?: number;
+    // public userMenuId?: number;
     public servingSize?: number;
-
+    public mealType!: 'breakfast' | 'lunch' | 'dinner' | 'snack';
     public readonly createdAt!: Date;
     public readonly updatedAt!: Date;
 
     public static associate = () => {
-        DailyCaloFoodMapping.belongsTo(Food, {
+        CaloIntakeMapping.belongsTo(Food, {
             foreignKey: 'foodId',
             as: 'food',
         });
-        DailyCaloFoodMapping.belongsTo(UserFood, {
+        CaloIntakeMapping.belongsTo(UserFood, {
             foreignKey: 'userFoodId',
             as: 'userFood',
         });
-        DailyCaloFoodMapping.belongsTo(Meal, {
+        CaloIntakeMapping.belongsTo(Meal, {
             foreignKey: 'mealId',
             as: 'meal',
         });
-        DailyCaloFoodMapping.belongsTo(UserMeal, {
+        CaloIntakeMapping.belongsTo(UserMeal, {
             foreignKey: 'userMealId',
             as: 'userMeal',
         });
-        DailyCaloFoodMapping.belongsTo(Menu, {
-            foreignKey: 'menuId',
-            as: 'menu',
-        });
-        DailyCaloFoodMapping.belongsTo(UserMenu, {
-            foreignKey: 'userMenuId',
-            as: 'userMenu',
-        });
-        DailyCaloFoodMapping.belongsTo(DailyCalo, {
+        // CaloIntakeMapping.belongsTo(Menu, {
+        //     foreignKey: 'menuId',
+        //     as: 'menu',
+        // });
+        // CaloIntakeMapping.belongsTo(UserMenu, {
+        //     foreignKey: 'userMenuId',
+        //     as: 'userMenu',
+        // });
+        CaloIntakeMapping.belongsTo(DailyCalo, {
             foreignKey: 'dailyCaloId',
+        });
+
+        CaloIntakeMapping.belongsTo(DailyCalo, {
+            foreignKey: 'dailyCaloId',
+            targetKey: 'id',
             as: 'dailyCalo',
         });
     };
 }
 
-DailyCaloFoodMapping.init(
+CaloIntakeMapping.init(
     {
         id: {
             type: DataTypes.INTEGER,
@@ -67,10 +72,6 @@ DailyCaloFoodMapping.init(
         dailyCaloId: {
             type: DataTypes.INTEGER,
             allowNull: false,
-            references: {
-                model: DailyCalo,
-                key: 'id',
-            },
         },
         foodId: {
             type: DataTypes.INTEGER,
@@ -104,32 +105,36 @@ DailyCaloFoodMapping.init(
                 key: 'id',
             },
         },
-        menuId: {
-            type: DataTypes.INTEGER,
-            allowNull: false,
-            references: {
-                model: Menu,
-                key: 'id',
-            },
-        },
-        userMenuId: {
-            type: DataTypes.INTEGER,
-            allowNull: true,
-            references: {
-                model: UserMenu,
-                key: 'id',
-            },
-        },
+        // menuId: {
+        //     type: DataTypes.INTEGER,
+        //     allowNull: false,
+        //     references: {
+        //         model: Menu,
+        //         key: 'id',
+        //     },
+        // },
+        // userMenuId: {
+        //     type: DataTypes.INTEGER,
+        //     allowNull: true,
+        //     references: {
+        //         model: UserMenu,
+        //         key: 'id',
+        //     },
+        // },
         servingSize: {
             type: DataTypes.INTEGER,
             allowNull: true,
         },
+        mealType: {
+            type: DataTypes.ENUM('breakfast', 'lunch', 'dinner', 'snack'),
+            allowNull: false,
+        },
     },
     {
         sequelize,
-        modelName: 'DailyCaloFoodMapping',
-        tableName: 'Daily_Calo_Food_Mappings',
+        modelName: 'CaloIntakeMapping',
+        tableName: 'calo_intake_mappings',
     },
 );
 
-export default DailyCaloFoodMapping;
+export default CaloIntakeMapping;

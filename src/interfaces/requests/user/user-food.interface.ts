@@ -1,4 +1,5 @@
 interface IDataRequestUserFood {
+    id: number;
     name: string;
     calories: number;
     protein: number;

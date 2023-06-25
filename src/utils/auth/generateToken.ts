@@ -11,7 +11,7 @@ export const createAccessToken = (
         { id: id, userName: username, role: role },
         process.env.ACCESS_TOKEN_SECRET || 'default-secret-key',
         {
-            expiresIn: '1h',
+            expiresIn: '7d',
         },
     );
     return accessToken;

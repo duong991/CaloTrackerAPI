@@ -2,9 +2,8 @@ import { Model, DataTypes } from 'sequelize';
 import { sequelize } from '../config/connectDB';
 import UserMealFood from './UserMealFood';
 import User from './User';
-import UserMealMenu from './UserMealMenu';
-import DailyCaloFoodMapping from './DailyCaloFoodMapping';
-
+// import UserMealMenu from './UserMealMenu';
+import CaloIntakeMapping from './CaloIntakeMapping';
 import { UserMealAttributes } from '../interfaces/models/model.interface';
 class UserMeal extends Model<UserMealAttributes> implements UserMealAttributes {
     public id!: number;
@@ -16,7 +15,7 @@ class UserMeal extends Model<UserMealAttributes> implements UserMealAttributes {
     public protein!: number;
     public carbohydrates!: number;
     public fat!: number;
-    public mealType!: 'breakfast' | 'lunch' | 'dinner' | 'snacks';
+    public mealType!: 'breakfast' | 'lunch' | 'dinner' | 'snack';
 
     public readonly createdAt!: Date;
     public readonly updatedAt!: Date;
@@ -27,13 +26,13 @@ class UserMeal extends Model<UserMealAttributes> implements UserMealAttributes {
             foreignKey: 'mealId',
             as: 'userMealFoods',
         });
-        UserMeal.hasMany(UserMealMenu, {
+        // UserMeal.hasMany(UserMealMenu, {
+        //     foreignKey: 'userMealId',
+        //     as: 'userMealMenus',
+        // });
+        UserMeal.hasMany(CaloIntakeMapping, {
             foreignKey: 'userMealId',
-            as: 'userMealMenus',
-        });
-        UserMeal.hasMany(DailyCaloFoodMapping, {
-            foreignKey: 'userMealId',
-            as: 'dailyCaloFoodMappings',
+            as: 'caloIntakeMappings',
         });
     };
 }
@@ -82,7 +81,7 @@ UserMeal.init(
             allowNull: false,
         },
         mealType: {
-            type: DataTypes.ENUM('breakfast', 'lunch', 'dinner', 'snacks'),
+            type: DataTypes.ENUM('breakfast', 'lunch', 'dinner', 'snack'),
             allowNull: false,
         },
     },

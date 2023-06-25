@@ -3,7 +3,7 @@ import { sequelize } from '../config/connectDB';
 
 import User from './User';
 import UserMealFood from './UserMealFood';
-import DailyCaloFoodMapping from './DailyCaloFoodMapping';
+import CaloIntakeMapping from './CaloIntakeMapping';
 
 import { UserFoodAttributes } from '../interfaces/models/model.interface';
 class UserFood extends Model<UserFoodAttributes> implements UserFoodAttributes {
@@ -26,8 +26,8 @@ class UserFood extends Model<UserFoodAttributes> implements UserFoodAttributes {
             foreignKey: 'mealId',
             as: 'userMealFoods',
         });
-        UserFood.hasMany(DailyCaloFoodMapping, {
-            foreignKey: 'dailyCaloFoodMappings',
+        UserFood.hasMany(CaloIntakeMapping, {
+            foreignKey: 'caloIntakeMappings',
         });
     };
 }
@@ -70,7 +70,7 @@ UserFood.init(
     },
     {
         modelName: 'UserFood',
-        tableName: 'User_Foods',
+        tableName: 'user_foods',
         sequelize,
     },
 );

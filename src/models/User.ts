@@ -8,7 +8,7 @@ import WaterLog from './WaterLog';
 import UserFood from './UserFood';
 import UserMeal from './UserMeal';
 import DailyMenu from './DailyCalo';
-import UserMenu from './UserMenu';
+// import UserMenu from './UserMenu';
 import Token from './Token';
 class User extends Model<UserAttributes> implements UserAttributes {
     public id!: number;
@@ -41,10 +41,10 @@ class User extends Model<UserAttributes> implements UserAttributes {
             foreignKey: 'userId',
             as: 'userMeals',
         });
-        User.hasMany(UserMenu, {
-            foreignKey: 'userId',
-            as: 'userMenus',
-        });
+        // User.hasMany(UserMenu, {
+        //     foreignKey: 'userId',
+        //     as: 'userMenus',
+        // });
         User.hasMany(DailyMenu, {
             foreignKey: 'userId',
             as: 'dailyMenus',

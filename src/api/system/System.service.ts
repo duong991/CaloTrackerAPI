@@ -2,6 +2,11 @@ import Exercise from '../../models/Exercise';
 import Food from '../../models/Food';
 import Meal from '../../models/Meal';
 import MealFood from '../../models/MealFood';
+
+type TDataGetPaper = {
+    start: number;
+    length: number;
+};
 interface ISystemService {
     getExrById: (id: number) => Promise<Exercise | null>;
     getAllExr: () => Promise<Exercise[] | null>;
@@ -9,6 +14,16 @@ interface ISystemService {
     getAllFood: () => Promise<Food[] | null>;
     getMealById(id: number): Promise<Meal | null>;
     getAllMeals(): Promise<Meal[] | null>;
+
+    getFoodPaper(
+        data: TDataGetPaper,
+    ): Promise<{ foods: Food[]; count: number }>;
+    getExercisePaper(
+        data: TDataGetPaper,
+    ): Promise<{ exercises: Exercise[]; count: number }>;
+    getMealPaper(
+        data: TDataGetPaper,
+    ): Promise<{ meals: Meal[]; count: number }>;
 }
 
 const applyExcludeTimestamps = (options: any) => {
@@ -43,22 +58,6 @@ const SystemService: ISystemService = {
     },
     getAllMeals: async (): Promise<Meal[] | null> => {
         const meals = await Meal.findAll({
-            include: [
-                {
-                    model: MealFood,
-                    as: 'mealFoods',
-                    include: [
-                        {
-                            model: Food,
-                            as: 'food',
-                            attributes: {
-                                exclude: ['createdAt', 'updatedAt'],
-                            },
-                        },
-                    ],
-                    attributes: { exclude: ['createdAt', 'updatedAt'] },
-                },
-            ],
             attributes: { exclude: ['createdAt', 'updatedAt', 'image'] },
         });
         return meals;
@@ -79,6 +78,46 @@ const SystemService: ISystemService = {
             ],
         });
         return meal;
+    },
+
+    getFoodPaper: async (data): Promise<{ foods: Food[]; count: number }> => {
+        const count = await Food.count();
+        const foods = await Food.findAll({
+            attributes: { exclude: ['createdAt', 'updatedAt'] },
+            offset: data.start,
+            limit: data.length,
+        });
+        return {
+            foods,
+            count,
+        };
+    },
+    getExercisePaper: async (
+        data,
+    ): Promise<{ exercises: Exercise[]; count: number }> => {
+        const count = await Exercise.count();
+        const exercises = await Exercise.findAll({
+            attributes: { exclude: ['createdAt', 'updatedAt'] },
+            offset: data.start,
+            limit: data.length,
+        });
+        return {
+            exercises,
+            count,
+        };
+    },
+
+    getMealPaper: async (data): Promise<{ meals: Meal[]; count: number }> => {
+        const count = await Meal.count();
+        const meals = await Meal.findAll({
+            attributes: { exclude: ['createdAt', 'updatedAt', 'image'] },
+            offset: data.start,
+            limit: data.length,
+        });
+        return {
+            meals,
+            count,
+        };
     },
 };
 

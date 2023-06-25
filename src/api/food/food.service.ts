@@ -8,17 +8,22 @@ interface IUserFoodService {
         userId: number,
         data: IDataRequestUserFood,
     ) => Promise<UserFood | Error>;
-    updateFood: (
-        id: number,
-        req: IDataRequestUserFood,
-    ) => Promise<UserFood | null>;
-    deleteFood: (id: number) => Promise<boolean>;
+    updateFood: (req: IDataRequestUserFood) => Promise<UserFood | null>;
+    deleteFood: (userId: number, id: number) => Promise<boolean>;
     deleteFoods: (ids: number[]) => Promise<number>;
     checkUserFoods: (ids: number[], userId: number) => Promise<boolean>;
 }
 const UserFoodService: IUserFoodService = {
     getAllFoods: async (userId: number): Promise<UserFood[] | null> => {
         const foods = await UserFood.findAll({
+            attributes: [
+                'id',
+                'name',
+                'calories',
+                'protein',
+                'carbohydrates',
+                'fat',
+            ],
             where: { userId: userId },
         });
         return foods;
@@ -53,10 +58,10 @@ const UserFoodService: IUserFoodService = {
         });
     },
 
-    updateFood: async (id: number, req: IDataRequestUserFood) => {
-        const { name, calories, protein, carbohydrates, fat } = req;
+    updateFood: async (req: IDataRequestUserFood) => {
+        const { id, name, calories, protein, carbohydrates, fat } = req;
         const foodToUpdate = await UserFood.findByPk(id);
-
+        console.log('foodToUpdate', foodToUpdate);
         if (!foodToUpdate) {
             return null;
         }
@@ -71,13 +76,20 @@ const UserFoodService: IUserFoodService = {
 
         return foodToUpdate;
     },
-    deleteFood: async (id: number) => {
-        const numDeleted = await UserFood.destroy({
+    deleteFood: async (userId: number, id: number) => {
+        console.log('userId', userId, 'id', id);
+        const food = await UserFood.findOne({
             where: {
                 id: id,
+                userId: userId,
             },
         });
-        return numDeleted > 0;
+        console.log('food', food);
+        if (!food) {
+            return false;
+        }
+        food.destroy();
+        return true;
     },
     deleteFoods: async (ids: number[]) => {
         const numDeleted = await UserFood.destroy({

@@ -15,6 +15,6 @@ export interface IUserMealResponse {
     protein: number;
     carbohydrates: number;
     fat: number;
-    mealType: 'breakfast' | 'lunch' | 'dinner' | 'snacks';
+    mealType: 'breakfast' | 'lunch' | 'dinner' | 'snack';
     userMealFood: IUserMealFoodResponse[];
 }

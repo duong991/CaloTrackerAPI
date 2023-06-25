@@ -5,7 +5,8 @@ const router = express.Router();
 const controller = new MealManagerController();
 
 router.post('/', controller.createMeal);
-router.put('/:id', controller.updateMeal);
-router.delete('/:id', controller.updateMeal);
+router.put('', controller.updateMeal);
+router.delete('/:id', controller.deleteMeal);
+router.get('/:id', controller.getDetailMeal);
 
 export { router as MealManagerRouter };

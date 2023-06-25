@@ -7,7 +7,7 @@ interface ICreateUserMealRequest {
     protein: number;
     carbohydrates: number;
     fat: number;
-    mealType: 'breakfast' | 'lunch' | 'dinner' | 'snacks';
+    mealType: 'breakfast' | 'lunch' | 'dinner' | 'snack';
     userMealFood: IUserMealFood[];
 }
 
@@ -19,7 +19,7 @@ interface IUpdateUserMealRequest {
     protein: number;
     carbohydrates: number;
     fat: number;
-    mealType: 'breakfast' | 'lunch' | 'dinner' | 'snacks';
+    mealType: 'breakfast' | 'lunch' | 'dinner' | 'snack';
     userMealFood: IUpdateUserMealFood[];
 }
 

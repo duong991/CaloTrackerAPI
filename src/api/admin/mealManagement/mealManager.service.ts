@@ -1,8 +1,8 @@
 import Meal from '../../../models/Meal';
 import Food from '../../../models/Food';
 import MealFood from '../../../models/MealFood';
-import MealMenu from '../../../models/MealMenu';
-import Menu from '../../../models/Menu';
+// import MealMenu from '../../../models/MealMenu';
+// import Menu from '../../../models/Menu';
 import {
     ICreateMealRequest,
     IUpdateMealRequest,
@@ -15,6 +15,7 @@ interface IMealManagerService {
     createMeal(req: ICreateMealRequest): Promise<Meal>;
     updateMeal(mealId: number, req: IUpdateMealRequest): Promise<boolean>;
     deleteMeal(mealId: number): Promise<boolean>;
+    getDetailMeal(mealId: number): Promise<Meal | null>;
 }
 
 const MealManagerService: IMealManagerService = {
@@ -26,7 +27,7 @@ const MealManagerService: IMealManagerService = {
         const {
             name,
             description,
-            image,
+            // image,
             calories,
             protein,
             carbohydrates,
@@ -37,7 +38,7 @@ const MealManagerService: IMealManagerService = {
         const newMeal = await Meal.create({
             name,
             description,
-            image,
+            // image,
             calories,
             protein,
             carbohydrates,
@@ -71,75 +72,23 @@ const MealManagerService: IMealManagerService = {
             mealFood,
         } = req;
         try {
-            // Tìm tất cả các id bản ghi trong bảng MealFood có chứa mealId
-            const foodMeal = await MealFood.findAll({
-                attributes: ['id'],
+            // delete old meal food
+            await MealFood.destroy({
                 where: {
                     mealId: mealId,
                 },
                 transaction: t,
             });
-            // chuyển sang mảng các id
-            const foodMealIds = [];
-            for (let i = 0; i < foodMeal.length; i++) {
-                foodMealIds.push(foodMeal[i].id);
-            }
-
-            // lấy ra các bản ghi không có id trong bảng MealFood
-            const newFoodMeals = mealFood.filter((item) => {
-                return !item.id;
-            });
-            // lấy ra các id của bản ghi cần xóa trong bảng MealFood
-            // (các bản ghi có id nhưng không có trong mảng mealFood được gửi lên)
-            // ta thực hiện lấy ra các id của các bản ghi không có trong mảng mealFood
-            // và có trong mảng foodMealIds
-            const deleteFoodMealIds = foodMealIds.filter((item) => {
-                return !mealFood.find((foodMeal) => {
-                    return foodMeal.id === item;
+            // create new meal food
+            mealFood.map(async (item) => {
+                await MealFood.create({
+                    mealId: mealId,
+                    foodId: item.foodId,
+                    servingSize: item.servingSize,
                 });
             });
-            // thưc hiện xóa các bản ghi trong bảng MealFood
-            await MealFood.destroy({
-                where: {
-                    id: deleteFoodMealIds,
-                },
-                transaction: t,
-            });
-            // thực hiện cập nhật các bản ghi trong bảng MealFood
-            for (let i = 0; i < mealFood.length; i++) {
-                const foodMeal = mealFood[i];
-                if (foodMeal.id) {
-                    await MealFood.update(
-                        {
-                            mealId: mealId,
-                            foodId: foodMeal.foodId,
-                            servingSize: foodMeal.servingSize,
-                        },
-                        {
-                            where: {
-                                id: foodMeal.id,
-                            },
-                            transaction: t,
-                        },
-                    );
-                }
-            }
-            // thực hiện tạo mới các bản ghi trong bảng MealFood
-            for (let i = 0; i < newFoodMeals.length; i++) {
-                const newFoodMeal = newFoodMeals[i];
-                await MealFood.create(
-                    {
-                        mealId: mealId,
-                        foodId: newFoodMeal.foodId,
-                        servingSize: newFoodMeal.servingSize,
-                    },
-                    {
-                        transaction: t,
-                    },
-                );
-            }
 
-            // Cập nhật bảng Meal
+            // update meal
             await Meal.update(
                 {
                     name,
@@ -177,12 +126,12 @@ const MealManagerService: IMealManagerService = {
                 },
                 transaction: t,
             });
-            await MealMenu.destroy({
-                where: {
-                    mealId: mealId,
-                },
-                transaction: t,
-            });
+            // await MealMenu.destroy({
+            //     where: {
+            //         mealId: mealId,
+            //     },
+            //     transaction: t,
+            // });
             await Meal.destroy({
                 where: {
                     id: mealId,
@@ -196,6 +145,28 @@ const MealManagerService: IMealManagerService = {
             console.error(error);
             return false;
         }
+    },
+
+    getDetailMeal: async (mealId: number): Promise<Meal | null> => {
+        const meal = await Meal.findOne({
+            where: {
+                id: mealId,
+            },
+            attributes: { exclude: ['createdAt', 'updatedAt'] },
+            include: [
+                {
+                    model: MealFood,
+                    as: 'mealFoods',
+                    include: [
+                        {
+                            model: Food,
+                            as: 'food',
+                        },
+                    ],
+                },
+            ],
+        });
+        return meal;
     },
 };
 

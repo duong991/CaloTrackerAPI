@@ -20,16 +20,15 @@ export default class ExrManageController {
     }
 
     public async updateExr(req: Request, res: Response): Promise<Response> {
-        const id = Number(req.params.id);
+        const id = Number(req.query.id);
         try {
-            const [numberOfAffectedRows, [updateExr]] =
-                await ExrManageService.updateExr(id, req.body);
+            const isDone = await ExrManageService.updateExr(id, req.body);
 
-            if (numberOfAffectedRows === 0) {
+            if (!isDone) {
                 return res.status(404).json({ message: 'Exercise not found' });
             }
 
-            return res.status(200).json(updateExr);
+            return res.status(200).json({ message: 'Exercise updated' });
         } catch (err) {
             console.error(err);
             return res.status(500).json({ message: 'Server error' });

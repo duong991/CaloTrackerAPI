@@ -3,7 +3,7 @@ import AuthService from './auth.service';
 export default class AuthController {
     public async register(req: Request, res: Response): Promise<Response> {
         const { email, password } = req.body;
-
+        console.log(email, password);
         if (!email || !password) {
             return res
                 .status(400)

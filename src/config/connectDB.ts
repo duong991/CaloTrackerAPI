@@ -3,7 +3,7 @@ import dotenv from 'dotenv';
 dotenv.config();
 
 const {
-    DB_NAME = 'calorie_calculator_app',
+    DB_NAME = 'calories_app_2',
     DB_USER = 'root',
     DB_PASSWORD,
     DB_HOST,

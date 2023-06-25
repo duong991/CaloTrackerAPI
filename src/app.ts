@@ -14,20 +14,20 @@ import UserInfo from './models/UserInfo';
 import Exercise from './models/Exercise';
 import Food from './models/Food';
 import Meal from './models/Meal';
-import Menu from './models/Menu';
+// import Menu from './models/Menu';
 import Token from './models/Token';
 import UserExercise from './models/UserExercise';
 import UserFood from './models/UserFood';
 import UserMeal from './models/UserMeal';
 import UserMealFood from './models/UserMealFood';
-import UserMealMenu from './models/UserMealMenu';
+// import UserMealMenu from './models/UserMealMenu';
 import WaterLog from './models/WaterLog';
 import UserWeightHistory from './models/UserWeightHistory';
-import UserMenu from './models/UserMenu';
+// import UserMenu from './models/UserMenu';
 import DailyCalo from './models/DailyCalo';
-import DailyCaloFoodMapping from './models/DailyCaloFoodMapping';
+import CaloIntakeMapping from './models/CaloIntakeMapping';
 import MealFood from './models/MealFood';
-import MealMenu from './models/MealMenu';
+// import MealMenu from './models/MealMenu';
 import moment from 'moment-timezone';
 
 // Đặt múi giờ mặc định cho toàn bộ ứng dụng
@@ -53,16 +53,16 @@ UserFood.associate();
 Meal.associate();
 UserMeal.associate();
 
-Menu.associate();
-UserMenu.associate();
+// Menu.associate();
+// UserMenu.associate();
 
 MealFood.associate();
 UserMealFood.associate();
-MealMenu.associate();
-UserMealMenu.associate();
+// MealMenu.associate();
+// UserMealMenu.associate();
 
 DailyCalo.associate();
-DailyCaloFoodMapping.associate();
+CaloIntakeMapping.associate();
 
 UserWeightHistory.associate();
 WaterLog.associate();

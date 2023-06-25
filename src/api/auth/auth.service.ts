@@ -20,7 +20,7 @@ const AuthService: AuthService = {
     ): Promise<ILoginResponse> => {
         const user: User | null = await User.findOne({
             where: { username: username },
-            raw: true,
+            raw: false,
         });
         if (!user) {
             throw new Error('Tên người dùng hoặc mật khẩu không hợp lệ');
@@ -60,7 +60,7 @@ const AuthService: AuthService = {
         await User.create({
             username: username,
             password: hashedPassword,
-            role: false,
+            role: true,
         });
         // AuthService.login(username, password);
         return true;

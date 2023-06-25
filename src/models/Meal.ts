@@ -1,10 +1,9 @@
 import { Model, DataTypes } from 'sequelize';
 import { sequelize } from '../config/connectDB';
 import MealFood from './MealFood';
-import MealMenu from './MealMenu';
-import UserMealMenu from './UserMealMenu';
-import DailyCaloFoodMapping from './DailyCaloFoodMapping';
-
+// import MealMenu from './MealMenu';
+// import UserMealMenu from './UserMealMenu';
+import CaloIntakeMapping from './CaloIntakeMapping';
 import { MealAttributes } from '../interfaces/models/model.interface';
 
 class Meal extends Model<MealAttributes> implements MealAttributes {
@@ -16,24 +15,24 @@ class Meal extends Model<MealAttributes> implements MealAttributes {
     public protein!: number;
     public carbohydrates!: number;
     public fat!: number;
-    public mealType!: 'breakfast' | 'lunch' | 'dinner' | 'snacks';
+    public mealType!: 'breakfast' | 'lunch' | 'dinner' | 'snack';
     public static associate = () => {
         Meal.hasMany(MealFood, {
             foreignKey: 'mealId',
             as: 'mealFoods',
         });
-        Meal.hasMany(MealMenu, {
+        // Meal.hasMany(MealMenu, {
+        //     foreignKey: 'mealId',
+        //     as: 'mealMenus',
+        // });
+        Meal.hasMany(CaloIntakeMapping, {
             foreignKey: 'mealId',
-            as: 'mealMenus',
+            as: 'caloIntakeMappings',
         });
-        Meal.hasMany(DailyCaloFoodMapping, {
-            foreignKey: 'mealId',
-            as: 'dailyCaloFoodMappings',
-        });
-        Meal.hasMany(UserMealMenu, {
-            foreignKey: 'mealId',
-            as: 'userMealMenus',
-        });
+        // Meal.hasMany(UserMealMenu, {
+        //     foreignKey: 'mealId',
+        //     as: 'userMealMenus',
+        // });
     };
 }
 
@@ -73,7 +72,7 @@ Meal.init(
             allowNull: false,
         },
         mealType: {
-            type: DataTypes.ENUM('breakfast', 'lunch', 'dinner', 'snacks'),
+            type: DataTypes.ENUM('breakfast', 'lunch', 'dinner', 'snack'),
             allowNull: false,
         },
     },

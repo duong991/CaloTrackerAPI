@@ -1,19 +1,17 @@
 import { Request, Response, NextFunction } from 'express';
 import UserFoodService from '../api/food/food.service';
 import UserMealService from '../api/meal/meal.service';
-import UserMenuService from '../api/menu/menu.service';
+// import UserMenuService from '../api/menu/menu.service';
 
 const checkFoodOwnership = async (
     req: Request,
     res: Response,
     next: NextFunction,
 ) => {
-    const foodId = +req.params.id;
+    const foodId = req.body.data.id;
     const userId = req.user.id; // assume that user information is extracted from JWT token
-
     try {
         const food = await UserFoodService.getFoodById(foodId);
-
         if (!food) {
             return res.status(404).json({ message: 'Food not found' });
         }
@@ -61,11 +59,11 @@ const checkMealOwnership = async (
     res: Response,
     next: NextFunction,
 ) => {
-    const mealId = +req.params.id;
+    const mealId = req.body.mealId as string;
     const userId = req.user.id; // assume that user information is extracted from JWT token
-
+    console.log('mealId: ', mealId);
     try {
-        const meal = await UserMealService.getMealById(mealId);
+        const meal = await UserMealService.getMealById(+mealId);
 
         if (!meal) {
             return res.status(404).json({ message: 'Meal not found' });
@@ -84,37 +82,37 @@ const checkMealOwnership = async (
     }
 };
 
-const checkMenuOwnership = async (
-    req: Request,
-    res: Response,
-    next: NextFunction,
-) => {
-    const menuId = +req.params.id;
-    const userId = req.user.id; // assume that user information is extracted from JWT token
+// const checkMenuOwnership = async (
+//     req: Request,
+//     res: Response,
+//     next: NextFunction,
+// ) => {
+//     const menuId = +req.params.id;
+//     const userId = req.user.id; // assume that user information is extracted from JWT token
 
-    try {
-        const menu = await UserMenuService.getMenuById(menuId);
+//     try {
+//         const menu = await UserMenuService.getMenuById(menuId);
 
-        if (!menu) {
-            return res.status(404).json({ message: 'Menu not found' });
-        }
+//         if (!menu) {
+//             return res.status(404).json({ message: 'Menu not found' });
+//         }
 
-        if (menu.userId !== userId) {
-            return res.status(403).json({
-                message: 'You are not authorized to perform this action',
-            });
-        }
+//         if (menu.userId !== userId) {
+//             return res.status(403).json({
+//                 message: 'You are not authorized to perform this action',
+//             });
+//         }
 
-        next();
-    } catch (error) {
-        console.error(error);
-        return res.status(500).json({ message: 'Server error' });
-    }
-};
+//         next();
+//     } catch (error) {
+//         console.error(error);
+//         return res.status(500).json({ message: 'Server error' });
+//     }
+// };
 
 export {
     checkFoodOwnership,
     checkArrFoodOwnership,
     checkMealOwnership,
-    checkMenuOwnership,
+    // checkMenuOwnership,
 };

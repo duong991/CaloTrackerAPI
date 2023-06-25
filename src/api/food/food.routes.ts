@@ -14,13 +14,8 @@ const controller = new UserFoodController();
 router.get('/', controller.getAllFoods);
 router.get('/:id', checkFoodOwnership, controller.getFoodById);
 router.post('/', createFoodValidator, controller.createFood);
-router.put(
-    '/:id',
-    checkFoodOwnership,
-    updateFoodValidator,
-    controller.updateFood,
-);
+router.put('/update', checkFoodOwnership, controller.updateFood);
 router.delete('/', checkArrFoodOwnership, controller.deleteFoods);
-router.delete('/:id', checkArrFoodOwnership, controller.deleteFoods);
+router.post('/delete', controller.deleteFood);
 
 export { router as FoodRouter };

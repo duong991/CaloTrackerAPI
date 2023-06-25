@@ -2,7 +2,7 @@
     "development": {
         "username": "root",
         "password": null,
-        "database": "calorie_calculator_app",
+        "database": "calories_app_2",
         "host": "127.0.0.1",
         "dialect": "mysql",
         "port": "3308",
@@ -11,7 +11,7 @@
     "test": {
         "username": "root",
         "password": null,
-        "database": "calorie_calculator_app",
+        "database": "calories_app_2",
         "host": "127.0.0.1",
         "dialect": "mysql",
         "port": "3308"
@@ -19,7 +19,7 @@
     "production": {
         "username": "root",
         "password": null,
-        "database": "calorie_calculator_app",
+        "database": "calories_app_2",
         "host": "127.0.0.1",
         "dialect": "mysql",
         "port": "3308"

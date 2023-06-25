@@ -6,7 +6,7 @@ export class UserMealController {
         const userId = req.user.id;
         try {
             const meals = await UserMealService.getAllMealsByUserId(userId);
-            return res.status(200).json(meals);
+            return res.status(200).json({ items: meals });
         } catch (err) {
             console.error(err);
             return res.status(500).json({ message: 'Server error' });
@@ -61,7 +61,7 @@ export class UserMealController {
     }
 
     public async deleteMeal(req: Request, res: Response): Promise<Response> {
-        const mealId = Number(req.params.id);
+        const mealId = req.body.mealId;
         try {
             const deleteStatus = await UserMealService.deleteMeal(mealId);
             if (deleteStatus) {

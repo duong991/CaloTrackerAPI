@@ -2,8 +2,8 @@ import { Model, DataTypes } from 'sequelize';
 import { sequelize } from '../config/connectDB';
 import { DailyCaloAttributes } from '../interfaces/models/model.interface';
 import User from './User';
-import DailyCaloFoodMapping from './DailyCaloFoodMapping';
-
+import CaloIntakeMapping from './CaloIntakeMapping';
+import CaloConsumedMapping from './CaloConsumedMapping';
 class DailyCalo
     extends Model<DailyCaloAttributes>
     // eslint-disable-next-line prettier/prettier
@@ -15,9 +15,13 @@ class DailyCalo
     public readonly updatedAt!: Date;
 
     public static associate = () => {
-        DailyCalo.hasMany(DailyCaloFoodMapping, {
+        DailyCalo.hasMany(CaloIntakeMapping, {
             foreignKey: 'dailyCaloId',
-            as: 'dailyCaloFoodMappings',
+            as: 'caloIntakeMappings',
+        });
+        DailyCalo.hasMany(CaloConsumedMapping, {
+            foreignKey: 'dailyCaloId',
+            as: 'caloConsumedMappings',
         });
 
         DailyCalo.belongsTo(User, { foreignKey: 'userId', as: 'user' });
@@ -47,7 +51,7 @@ DailyCalo.init(
     {
         sequelize,
         modelName: 'DailyCalo',
-        tableName: 'Daily_Calos',
+        tableName: 'daily_calos',
     },
 );
 

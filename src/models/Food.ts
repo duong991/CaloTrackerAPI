@@ -2,8 +2,8 @@ import { Model, DataTypes } from 'sequelize';
 import { sequelize } from '../config/connectDB';
 import MealFood from './MealFood';
 import UserMealFood from './UserMealFood';
-import DailyCaloFoodMapping from './DailyCaloFoodMapping';
 import { FoodAttributes } from '../interfaces/models/model.interface';
+import CaloIntakeMapping from './CaloIntakeMapping';
 class Food extends Model<FoodAttributes> implements FoodAttributes {
     public id!: number;
     public name!: string;
@@ -20,9 +20,9 @@ class Food extends Model<FoodAttributes> implements FoodAttributes {
             foreignKey: 'foodId',
             as: 'mealFoods',
         });
-        Food.hasMany(DailyCaloFoodMapping, {
+        Food.hasMany(CaloIntakeMapping, {
             foreignKey: 'foodId',
-            as: 'dailyCaloFoodMappings',
+            as: 'caloIntakeMappings',
         });
         Food.hasMany(UserMealFood, {
             foreignKey: 'foodId',

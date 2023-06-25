@@ -5,7 +5,7 @@ const router = express.Router();
 const controller = new ExrManageController();
 
 router.post('/', controller.createExr);
-router.put('/:id', controller.updateExr);
+router.put('', controller.updateExr);
 router.delete('/:id', controller.deleteExr);
 
 export { router as ExrManageRouter };

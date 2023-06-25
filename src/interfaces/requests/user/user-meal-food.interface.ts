@@ -1,5 +1,4 @@
 interface IUserMealFood {
-    mealId: number;
     foodId?: number;
     userFoodId?: number;
     servingSize: number;

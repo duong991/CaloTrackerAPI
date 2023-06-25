@@ -86,4 +86,52 @@ export default class SystemController {
             return res.status(500).json({ message: 'Server error' });
         }
     }
+
+    public async getFoodPaper(req: Request, res: Response) {
+        const start = parseInt(req.query.start as string);
+        const length = parseInt(req.query.length as string);
+
+        try {
+            const foodPaper = await SystemService.getFoodPaper({
+                start,
+                length,
+            });
+            return res.status(200).json(foodPaper);
+        } catch (err) {
+            console.error(err);
+            return res.status(500).json({ message: 'Server error' });
+        }
+    }
+
+    public async getExercisePaper(req: Request, res: Response) {
+        const start = parseInt(req.query.start as string);
+        const length = parseInt(req.query.length as string);
+
+        try {
+            const exercisePaper = await SystemService.getExercisePaper({
+                start,
+                length,
+            });
+            return res.status(200).json(exercisePaper);
+        } catch (err) {
+            console.error(err);
+            return res.status(500).json({ message: 'Server error' });
+        }
+    }
+
+    public async getMealPaper(req: Request, res: Response) {
+        const start = parseInt(req.query.start as string);
+        const length = parseInt(req.query.length as string);
+
+        try {
+            const mealPaper = await SystemService.getMealPaper({
+                start,
+                length,
+            });
+            return res.status(200).json(mealPaper);
+        } catch (err) {
+            console.error(err);
+            return res.status(500).json({ message: 'Server error' });
+        }
+    }
 }

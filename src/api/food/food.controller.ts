@@ -5,7 +5,7 @@ export class UserFoodController {
         const userId = req.user.id;
         try {
             const foods = await UserFoodService.getAllFoods(userId);
-            return res.status(201).json(foods);
+            return res.status(200).json({ items: foods });
         } catch (err) {
             console.error(err);
             return res.status(500).json({ message: 'Server error' });
@@ -38,12 +38,8 @@ export class UserFoodController {
     }
 
     public async updateFood(req: Request, res: Response): Promise<Response> {
-        const foodId = Number(req.params.id);
         try {
-            const updatedFood = await UserFoodService.updateFood(
-                foodId,
-                req.body,
-            );
+            const updatedFood = await UserFoodService.updateFood(req.body.data);
             if (!updatedFood)
                 return res.status(404).json({ message: 'Food not found' });
             return res.status(200).json({ message: 'Food updated' });
@@ -54,9 +50,10 @@ export class UserFoodController {
     }
 
     public async deleteFood(req: Request, res: Response): Promise<Response> {
-        const foodId = +req.params.id;
+        const userId = req.user.id;
+        const foodId = req.body.foodId;
         try {
-            const deleteFood = await UserFoodService.deleteFood(foodId);
+            const deleteFood = await UserFoodService.deleteFood(userId, foodId);
             if (!deleteFood)
                 return res.status(404).json({ message: 'Food not found' });
             return res.status(200).json({ message: 'Food deleted' });

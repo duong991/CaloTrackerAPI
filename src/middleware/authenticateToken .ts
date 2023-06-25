@@ -37,17 +37,23 @@ const authenticateToken = async (
 
         // Lưu trữ thông tin user vào req để sử dụng trong các request khác
         req.user = user;
-
+        req.accessToken = token;
         // Tiếp tục xử lý request
         next();
     } catch (err: any) {
-        console.log(err);
         if (err && err.name === 'TokenExpiredError') {
+            console.log(req);
             // Nếu access token hết hạn, sử dụng refresh token để tạo access token mới
-            const refreshToken = req.cookies['refreshToken'];
+            const refreshToken = req.headers['refresh-token'] as string;
+
+            console.log('res.cookies', refreshToken);
+            if (!refreshToken)
+                return res.status(404).json({ message: 'Invalid token' });
             const tokenInDb = await Token.findOne({
-                where: { refresh_token: refreshToken },
+                where: { refreshToken: refreshToken },
             });
+
+            console.log('tokenInDb', tokenInDb);
 
             if (!tokenInDb) {
                 return res.status(401).json({ message: 'Invalid token' });
@@ -78,8 +84,7 @@ const authenticateToken = async (
                 // Lưu trữ thông tin user vào req để sử dụng trong các request khác
                 req.user = user;
 
-                // Thêm cookie mới chứa access token mới
-                res.cookie('accessToken', accessToken, { httpOnly: true });
+                req.accessToken = accessToken;
 
                 // Tiếp tục xử lý request
                 next();
