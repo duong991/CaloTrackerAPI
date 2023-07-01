@@ -26,11 +26,8 @@ export class WaterLogController {
         const date = req.query.date as string;
         const convertDate = new Date(date);
 
-        const today = moment()
-            .add(7, 'hours')
-            .toDate()
-            .toISOString()
-            .slice(0, 10);
+        const today = new Date().toISOString().slice(0, 10);
+
         try {
             const waterLog = await UserWaterLogService.getWaterLogByDate(
                 userId,

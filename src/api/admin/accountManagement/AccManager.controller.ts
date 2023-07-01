@@ -98,4 +98,34 @@ export default class AccManagerController {
             return res.status(500).json({ message: 'Server error' });
         }
     }
+
+    public async getCountNewAccount(
+        req: Request,
+        res: Response,
+    ): Promise<Response> {
+        try {
+            const result = await AccManagerService.getCountNewAccount();
+            return res.status(200).json({
+                count: result.countNewAccount,
+                countAll: result.countAll,
+            });
+        } catch (err) {
+            console.error(err);
+            return res.status(500).json({ message: 'Server error' });
+        }
+    }
+
+    public async getGender(req: Request, res: Response): Promise<Response> {
+        try {
+            const result = await AccManagerService.getGender();
+            return res.status(200).json({
+                countMale: result.countMale,
+                countFemale: result.countFemale,
+                countAll: result.countAll,
+            });
+        } catch (err) {
+            console.error(err);
+            return res.status(500).json({ message: 'Server error' });
+        }
+    }
 }

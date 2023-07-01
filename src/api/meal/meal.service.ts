@@ -11,6 +11,16 @@ import {
 import { Transaction } from 'sequelize';
 import { sequelize } from '../../config/connectDB';
 import { Op } from 'sequelize';
+
+interface IFood {
+    id: number;
+    serviceSize: number;
+}
+
+interface IResponseMealDetails {
+    systemFood: IFood[];
+    userFood: IFood[];
+}
 interface IUserMealService {
     getAllMeals(userId: number): Promise<UserMeal[]>;
     getAllMealsByUserId(userId: number): Promise<UserMeal[]>;
@@ -21,6 +31,7 @@ interface IUserMealService {
     ): Promise<UserMeal | Error>;
     updateMeal(mealId: number, req: IUpdateUserMealRequest): Promise<boolean>;
     deleteMeal(mealId: number): Promise<boolean>;
+    getUserMealDetail(mealId: number): Promise<IResponseMealDetails | null>;
 }
 
 const UserMealService: IUserMealService = {
@@ -256,5 +267,40 @@ const UserMealService: IUserMealService = {
             return false;
         }
     },
+
+    getUserMealDetail: async (
+        mealId: number,
+    ): Promise<IResponseMealDetails | null> => {
+        const userFood: IFood[] = [];
+        const systemFood: IFood[] = [];
+        const meal = await UserMeal.findByPk(mealId);
+        if (!meal) {
+            return null;
+        }
+        const mealFoods = await UserMealFood.findAll({
+            where: {
+                mealId: mealId,
+            },
+        });
+        mealFoods.map((item) => {
+            if (item.foodId) {
+                userFood.push({
+                    id: item.foodId,
+                    serviceSize: item.servingSize,
+                });
+            } else if (item.userFoodId) {
+                systemFood.push({
+                    id: item.userFoodId,
+                    serviceSize: item.servingSize,
+                });
+            }
+        });
+        const dataResponse: IResponseMealDetails = {
+            systemFood,
+            userFood,
+        };
+        return dataResponse;
+    },
 };
+
 export default UserMealService;

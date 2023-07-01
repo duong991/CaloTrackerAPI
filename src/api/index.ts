@@ -10,6 +10,7 @@ import { AuthRouter } from './auth/auth.routes';
 import { FoodRouter } from './food/food.routes';
 import { UserRouter } from './user/user.routes';
 import { MealRouter } from './meal/meal.routes';
+import { SearchRouter } from './search/search.routes';
 // import { MenuRouter } from './menu/menu.routes';
 // import { dataRouter } from './data/data.routes';
 import { ExcelRouter } from './excel/excel.routes';
@@ -32,7 +33,7 @@ router.use('/auth-web', AuthWebRouter);
 // router for admin need to be protected by admin role
 router.use('/manager-account', authenticateToken, isAdmin, AccManagerRouter);
 router.use('/manager-food', authenticateToken, isAdmin, FoodManageRouter);
-router.use('/manager-meal', MealManagerRouter);
+router.use('/manager-meal', authenticateToken, isAdmin, MealManagerRouter);
 router.use('/manager-exercise', authenticateToken, isAdmin, ExrManageRouter);
 
 router.use('/create-excel', ExcelRouter);
@@ -50,5 +51,7 @@ router.use('/water-log', authenticateToken, WaterLogRouter);
 router.use('/exercise', authenticateToken, UserRouter);
 router.use('/daily-menu', authenticateToken, UserRouter);
 router.use('/daily-calo', authenticateToken, DailyCaloRouter);
+
+router.use('/search', authenticateToken, SearchRouter);
 
 export default router;

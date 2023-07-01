@@ -19,4 +19,6 @@ router.put('/:id', checkMealOwnership, controller.updateMeal);
 // DELETE / meals /: id - Xóa một bữa ăn cụ thể bằng id
 router.post('/delete', checkMealOwnership, controller.deleteMeal);
 
+router.get('/detail/:id', controller.getUserMealDetail);
+
 export { router as MealRouter };

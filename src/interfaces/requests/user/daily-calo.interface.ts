@@ -13,7 +13,7 @@ interface IMealId {
     mealType: 'breakfast' | 'lunch' | 'dinner' | 'snack';
 }
 interface IDataRequestUpdateCaloIntake {
-    date: string;
+    date: Date;
     foodId: IFoodId[] | null;
     mealId: IMealId[] | null;
     userFoodId: IFoodId[] | null;
@@ -25,12 +25,12 @@ interface IExerciseId {
     duration: number;
 }
 interface IDataRequestUpdateCaloConsumed {
-    date: string;
+    date: Date;
     exerciseId: IExerciseId[] | null;
 }
 
 interface IDataRequestDeleteCaloIntake {
-    date: string;
+    date: Date;
     foodId: number[] | null;
     mealId: number[] | null;
     userFoodId: number[] | null;
@@ -38,7 +38,7 @@ interface IDataRequestDeleteCaloIntake {
 }
 
 interface IDataRequestDeleteCaloConsumed {
-    date: string;
+    date: Date;
     exerciseId: number[] | null;
 }
 

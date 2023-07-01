@@ -15,6 +15,12 @@ interface UserService {
         userId: number,
         userInfo: IUpdateInfoUserRequest,
     ) => Promise<number>;
+
+    updateWeight: (
+        userId: number,
+        weight: number,
+        date: string,
+    ) => Promise<boolean>;
 }
 
 const UserService: UserService = {
@@ -124,6 +130,66 @@ const UserService: UserService = {
             }
             await t.commit();
             return updatedRows;
+        } catch (error) {
+            await t.rollback();
+            throw error;
+        }
+    },
+
+    async updateWeight(
+        userId: number,
+        weight: number,
+        date: string,
+    ): Promise<boolean> {
+        const t: Transaction = await sequelize.transaction();
+        const dateWeightHistory = convertToDate(date);
+        try {
+            const isExistWeightLog = await UserWeightHistory.findOne({
+                where: { userId: userId, date: dateWeightHistory },
+            });
+            if (isExistWeightLog) {
+                await UserWeightHistory.update(
+                    {
+                        weight: weight,
+                    },
+                    {
+                        where: {
+                            userId: userId,
+                            date: dateWeightHistory,
+                        },
+                        transaction: t,
+                    },
+                );
+            } else {
+                await UserWeightHistory.create(
+                    {
+                        userId: userId,
+                        weight: weight,
+                        date: dateWeightHistory,
+                    },
+                    { transaction: t },
+                );
+            }
+
+            const [updatedUserInfo] = await UserInfo.update(
+                {
+                    weight: weight,
+                    lastTimeToUpdate: date,
+                },
+                {
+                    where: {
+                        userId: userId,
+                    },
+                    transaction: t,
+                },
+            );
+            if (updatedUserInfo === 0) {
+                await t.rollback();
+                throw new Error('User not found');
+            }
+
+            await t.commit();
+            return true;
         } catch (error) {
             await t.rollback();
             throw error;

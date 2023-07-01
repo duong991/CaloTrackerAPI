@@ -10,7 +10,18 @@ function convertToDate(inputString: string): Date {
 
     const currentYear = new Date().getFullYear();
 
-    const dateObject = new Date(currentYear, month - 1, day, hours, minutes);
+    const dateObject = new Date(currentYear, month - 1, day);
+
+    return dateObject;
+}
+
+// time format: 2023-06-27
+export function convertToDate2(inputString: string): Date {
+    const day = parseInt(inputString.split('-')[2]);
+    const month = parseInt(inputString.split('-')[1]);
+    const year = parseInt(inputString.split('-')[0]);
+
+    const dateObject = new Date(year, month - 1, day);
 
     return dateObject;
 }

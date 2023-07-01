@@ -8,4 +8,6 @@ router.get('/', controller.getUserInfo);
 router.post('/', controller.createUserInfo);
 router.put('/', controller.updateUserInfo);
 
+router.put('/weight', controller.updateWeight);
+
 export { router as UserRouter };

@@ -74,4 +74,22 @@ export class UserMealController {
             return res.status(500).json({ message: 'Server error' });
         }
     }
+
+    public async getUserMealDetail(
+        req: Request,
+        res: Response,
+    ): Promise<Response> {
+        const mealId = +req.params.id;
+        try {
+            const meal = await UserMealService.getUserMealDetail(mealId);
+            if (meal) {
+                return res.status(200).json(meal);
+            } else {
+                return res.status(400).json({ message: 'Invalid request' });
+            }
+        } catch (err) {
+            console.error(err);
+            return res.status(500).json({ message: 'Server error' });
+        }
+    }
 }

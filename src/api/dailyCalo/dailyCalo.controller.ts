@@ -1,8 +1,8 @@
 import { Request, Response } from 'express';
 import DailyCaloService from './dailyCalo.service';
-import convertToDate from '../../helpers/ConvertTime';
+import convertToDate, { convertToDate2 } from '../../helpers/ConvertTime';
 import moment from 'moment-timezone';
-
+import { checkDateMatchCurrent } from '../../utils/timeUtils';
 export class DailyCaloController {
     public async getAll(req: Request, res: Response): Promise<Response> {
         const userId = req.user.id;
@@ -18,16 +18,15 @@ export class DailyCaloController {
     public async getByDate(req: Request, res: Response): Promise<Response> {
         const userId = req.user.id;
         const date = req.query.date as string;
-        const convertDate = new Date(date);
-
-        const today = moment()
-            .add(7, 'hours')
-            .toDate()
-            .toISOString()
-            .slice(0, 10);
+        const convertDate = convertToDate2(date);
+        console.log(convertDate);
+        const checkDate = checkDateMatchCurrent(convertDate);
         try {
-            const dailyCalo = await DailyCaloService.getByDate(userId, date);
-            if (dailyCalo === null && date === today) {
+            const dailyCalo = await DailyCaloService.getByDate(
+                userId,
+                convertDate,
+            );
+            if (dailyCalo === null && checkDate) {
                 const newDailyCalo = await DailyCaloService.createDailyCalo(
                     userId,
                     convertDate,
@@ -57,8 +56,18 @@ export class DailyCaloController {
                     ...req.body,
                 },
             );
-            if (updateDailyCalo === null)
-                return res.status(404).json({ message: 'DailyCalo not found' });
+            if (updateDailyCalo === null) {
+                const newDailyCalo = await DailyCaloService.createDailyCalo(
+                    userId,
+                    req.body,
+                );
+                if (newDailyCalo === null)
+                    return res
+                        .status(404)
+                        .json({ message: 'Create fall daily calo' });
+                return res.status(201).json({ message: 'DailyCalo updated' });
+            }
+
             return res.status(200).json({ message: 'DailyCalo updated' });
         } catch (err) {
             console.error(err);

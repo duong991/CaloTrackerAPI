@@ -13,7 +13,7 @@ import { Op } from 'sequelize';
 
 interface IDailyCaloService {
     getAll: (userId: number) => Promise<DailyCalo[] | null>;
-    getByDate: (userId: number, date: string) => Promise<DailyCalo | null>;
+    getByDate: (userId: number, date: Date) => Promise<DailyCalo | null>;
     createDailyCalo: (userId: number, date: Date) => Promise<DailyCalo | null>;
     update_CaloIntake: (
         id: number,
@@ -44,8 +44,9 @@ const DailyCaloService: IDailyCaloService = {
 
     getByDate: async (
         userId: number,
-        date: string,
+        date: Date,
     ): Promise<DailyCalo | null> => {
+        console.log(date);
         const dailyCalo = await DailyCalo.findOne({
             where: { userId: userId, date: date },
             attributes: {
@@ -74,6 +75,7 @@ const DailyCaloService: IDailyCaloService = {
                 },
             ],
         });
+        console.log(dailyCalo);
         return dailyCalo;
     },
 
