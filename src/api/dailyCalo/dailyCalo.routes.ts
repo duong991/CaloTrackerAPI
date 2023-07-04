@@ -11,4 +11,6 @@ router.put('/calo-consumed', controller.update_CaloConsumed);
 router.post('/calo-intake', controller.delete_CaloIntake);
 router.post('/calo-consumed', controller.delete_CaloConsumed);
 
+router.post('/delete-item-calo-intake', controller.delete_Item_CaloIntake);
+router.post('/delete-item-calo-consumed', controller.delete_Item_CaloConsumed);
 export { router as DailyCaloRouter };

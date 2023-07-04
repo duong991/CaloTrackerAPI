@@ -33,6 +33,19 @@ interface IDailyCaloService {
         userId: number,
         req: IDataRequestDeleteCaloConsumed,
     ) => Promise<boolean | null>;
+
+    delete_Item_CaloIntake: (
+        userId: number,
+        id: number,
+        date: Date,
+        type: 'food' | 'userFood' | 'meal' | 'userMeal',
+    ) => Promise<boolean | null>;
+
+    delete_Item_CaloConsumed: (
+        userId: number,
+        id: number,
+        date: Date,
+    ) => Promise<boolean | null>;
 }
 const DailyCaloService: IDailyCaloService = {
     getAll: async (userId: number): Promise<DailyCalo[] | null> => {
@@ -338,6 +351,102 @@ const DailyCaloService: IDailyCaloService = {
                 });
             }
 
+            await t.commit();
+            return true;
+        } catch (error) {
+            await t.rollback();
+            console.error(error);
+            return false;
+        }
+    },
+
+    delete_Item_CaloConsumed: async (
+        userId: number,
+        id: number,
+        date: Date,
+    ): Promise<boolean | null> => {
+        const t: Transaction = await sequelize.transaction();
+        const dailyCaloUpdate = await DailyCalo.findOne({
+            where: {
+                userId: userId,
+                date: date,
+            },
+        });
+        if (!dailyCaloUpdate) {
+            await t.rollback();
+            return null;
+        }
+
+        try {
+            await CaloConsumedMapping.destroy({
+                where: {
+                    dailyCaloId: dailyCaloUpdate.id,
+                    exerciseId: id,
+                },
+            });
+
+            await t.commit();
+            return true;
+        } catch (error) {
+            await t.rollback();
+            console.error(error);
+            return false;
+        }
+    },
+
+    delete_Item_CaloIntake: async (
+        userId: number,
+        id: number,
+        date: Date,
+        type: 'food' | 'userFood' | 'meal' | 'userMeal',
+    ): Promise<boolean | null> => {
+        const t: Transaction = await sequelize.transaction();
+        const dailyCaloUpdate = await DailyCalo.findOne({
+            where: {
+                userId: userId,
+                date: date,
+            },
+        });
+        if (!dailyCaloUpdate) {
+            await t.rollback();
+            return null;
+        }
+
+        try {
+            switch (type) {
+                case 'food':
+                    await CaloIntakeMapping.destroy({
+                        where: {
+                            dailyCaloId: dailyCaloUpdate.id,
+                            foodId: id,
+                        },
+                    });
+                    break;
+                case 'userFood':
+                    await CaloIntakeMapping.destroy({
+                        where: {
+                            dailyCaloId: dailyCaloUpdate.id,
+                            userFoodId: id,
+                        },
+                    });
+                    break;
+                case 'meal':
+                    await CaloIntakeMapping.destroy({
+                        where: {
+                            dailyCaloId: dailyCaloUpdate.id,
+                            mealId: id,
+                        },
+                    });
+                    break;
+                case 'userMeal':
+                    await CaloIntakeMapping.destroy({
+                        where: {
+                            dailyCaloId: dailyCaloUpdate.id,
+                            userMealId: id,
+                        },
+                    });
+                    break;
+            }
             await t.commit();
             return true;
         } catch (error) {

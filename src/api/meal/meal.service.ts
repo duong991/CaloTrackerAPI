@@ -82,6 +82,7 @@ const UserMealService: IUserMealService = {
         userId: number,
         data: ICreateUserMealRequest,
     ): Promise<UserMeal | Error> => {
+        const t: Transaction = await sequelize.transaction();
         const {
             name,
             description,
@@ -91,40 +92,63 @@ const UserMealService: IUserMealService = {
             carbohydrates,
             fat,
             mealType,
-            userMealFood,
+            systemFood,
+            userFood,
         } = data;
+        console.log(image);
         const isExist = await UserMeal.findOne({
             where: {
                 name: name,
                 userId: userId,
             },
+            transaction: t,
         });
 
-        if (!isExist) {
+        if (isExist) {
             throw new Error('Meal already exists');
         }
-
-        const newMeal = await UserMeal.create({
-            userId,
-            name,
-            description,
-            image,
-            calories,
-            protein,
-            carbohydrates,
-            fat,
-            mealType,
-        });
-        const newMealId = newMeal.id;
-        userMealFood.map(async (item) => {
-            await UserMealFood.create({
-                mealId: newMealId,
-                foodId: item.foodId,
-                userFoodId: item.userFoodId,
-                servingSize: item.servingSize,
-            });
-        });
-        return newMeal;
+        try {
+            const newMeal = await UserMeal.create(
+                {
+                    userId,
+                    name,
+                    description,
+                    image,
+                    calories,
+                    protein,
+                    carbohydrates,
+                    fat,
+                    mealType,
+                },
+                { transaction: t },
+            );
+            const newMealId = newMeal.id;
+            if (systemFood.length > 0) {
+                const newSystemFood = systemFood.map((item) => {
+                    return {
+                        mealId: newMealId,
+                        foodId: item.id,
+                        servingSize: item.servingSize,
+                    };
+                });
+                await UserMealFood.bulkCreate(newSystemFood);
+            }
+            if (userFood.length > 0) {
+                const newUserFood = userFood.map((item) => {
+                    return {
+                        mealId: newMealId,
+                        userFoodId: item.id,
+                        servingSize: item.servingSize,
+                    };
+                });
+                await UserMealFood.bulkCreate(newUserFood);
+            }
+            await t.commit();
+            return newMeal;
+        } catch (error) {
+            await t.rollback();
+            throw error;
+        }
     },
     updateMeal: async (
         mealId: number,

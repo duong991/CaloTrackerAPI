@@ -1,4 +1,9 @@
 import { IUserMealFood, IUpdateUserMealFood } from './user-meal-food.interface';
+
+interface Food {
+    id: number;
+    servingSize: number;
+}
 interface ICreateUserMealRequest {
     name: string;
     description?: string;
@@ -8,7 +13,8 @@ interface ICreateUserMealRequest {
     carbohydrates: number;
     fat: number;
     mealType: 'breakfast' | 'lunch' | 'dinner' | 'snack';
-    userMealFood: IUserMealFood[];
+    systemFood: Food[] | [];
+    userFood: Food[] | [];
 }
 
 interface IUpdateUserMealRequest {

@@ -26,15 +26,19 @@ export class WaterLogController {
         const date = req.query.date as string;
         const convertDate = new Date(date);
 
-        const today = new Date().toISOString().slice(0, 10);
+        const today = new Date();
 
         try {
             const waterLog = await UserWaterLogService.getWaterLogByDate(
                 userId,
                 date,
             );
-
-            if (!waterLog && date === today) {
+            if (
+                !waterLog &&
+                convertDate.getDate() === today.getDate() &&
+                convertDate.getMonth() === today.getMonth() &&
+                convertDate.getFullYear() === today.getFullYear()
+            ) {
                 const newWaterLog = await UserWaterLogService.createWaterLog(
                     userId,
                     { date: convertDate, amount: 0 },

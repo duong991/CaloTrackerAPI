@@ -133,4 +133,72 @@ export class DailyCaloController {
             return res.status(500).json({ message: 'Server error' });
         }
     }
+
+    public async delete_Item_CaloIntake(
+        req: Request,
+        res: Response,
+    ): Promise<Response> {
+        const userId = req.user.id;
+        const {
+            date,
+            id,
+            type,
+        }: {
+            date: Date;
+            id: number;
+            type: 'food' | 'userFood' | 'meal' | 'userMeal';
+        } = req.body;
+        try {
+            const deleteItemDailyCalo =
+                await DailyCaloService.delete_Item_CaloIntake(
+                    userId,
+                    id,
+                    date,
+                    type,
+                );
+            if (deleteItemDailyCalo === null) {
+                return res.status(404).json({ message: 'DailyCalo not found' });
+            }
+            if (deleteItemDailyCalo === false) {
+                return res.status(404).json({ message: 'Item not found' });
+            }
+            return res.status(200).json({ message: 'DailyCalo deleted' });
+        } catch (err) {
+            console.error(err);
+            return res.status(500).json({ message: 'Server error' });
+        }
+    }
+
+    public async delete_Item_CaloConsumed(
+        req: Request,
+        res: Response,
+    ): Promise<Response> {
+        const userId = req.user.id;
+        const {
+            date,
+            id,
+        }: {
+            date: Date;
+            id: number;
+        } = req.body;
+
+        try {
+            const deleteItemDailyCalo =
+                await DailyCaloService.delete_Item_CaloConsumed(
+                    userId,
+                    id,
+                    date,
+                );
+            if (deleteItemDailyCalo === null) {
+                return res.status(404).json({ message: 'DailyCalo not found' });
+            }
+            if (deleteItemDailyCalo === false) {
+                return res.status(404).json({ message: 'Item not found' });
+            }
+            return res.status(200).json({ message: 'DailyCalo deleted' });
+        } catch (err) {
+            console.error(err);
+            return res.status(500).json({ message: 'Server error' });
+        }
+    }
 }

@@ -52,14 +52,13 @@ const UserWaterLogService: IUserWaterLogService = {
     },
 
     updateWaterLog: async (userId: number, date: Date, amount: number) => {
-        const convertDate = new Date(date).toISOString().slice(0, 10);
+        const convertDate = new Date(date);
         const waterLogToUpdate = await WaterLog.findOne({
             where: {
                 userId: userId,
                 date: convertDate,
             },
         });
-        console.log(waterLogToUpdate);
         if (!waterLogToUpdate) {
             return null;
         }
